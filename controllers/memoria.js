@@ -25,8 +25,26 @@ const getAll = async (req, res) => {
   }
 };
 
+const getMemoria = async (req, res) => {
+  const { idEvento } = req.params;
+
+  try {
+    let res_memoria = await memoria.getMemoria(idEvento);
+    res.json(
+      success(res_memoria, {
+        limit: 1,
+        currentPage: 0,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const ArticleController = {
   getAll,
+  getMemoria,
 };
 
 module.exports = ArticleController;
