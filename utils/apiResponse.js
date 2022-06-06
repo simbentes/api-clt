@@ -1,19 +1,18 @@
-function success(data, meta = {}, message = "OK", statusCode = 200) {
+function success(data = {}, meta = {}, message = 'OK', statusCode = 200) {
   return {
     message,
     data,
     meta: {
+      ...meta,
       statusCode,
       error: false,
-      ...meta,
     },
   };
 }
 
-function error(message, statusCode = 500, errors = []) {
+function error(message = 'Server error', statusCode = 500, errors = []) {
   return {
     message,
-    code: statusCode,
     meta: {
       statusCode,
       error: true,
