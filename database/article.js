@@ -4,39 +4,12 @@ let article = {};
 article.getPub = (page, limit, uid) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT id_publicacoes AS id_pub, publicacoes.timestamp, texto, foto, id_utilizadores, CONCAT(utilizadores.nome, ' ', apelido), utilizadores.foto_perfil, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(publicacoes.timestamp), gostos.ref_id_utilizadores FROM publicacoes INNER JOIN utilizadores ON id_utilizadores = ref_id_utilizadores LEFT JOIN seguidores ON seguidores.ref_id_utilizadores_seguir = id_utilizadores AND seguidores.ref_id_utilizadores = ? LEFT JOIN gostos ON gostos.ref_id_publicacoes = id_publicacoes AND gostos.ref_id_utilizadores = ? ORDER BY publicacoes.timestamp DESC LIMIT ?, ?;`,
+      `SELECT id_publicacoes AS id_pub, publicacoes.timestamp, texto, foto, id_utilizadores, CONCAT(utilizadores.nome, ' ', apelido), utilizadores.foto_perfil, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(publicacoes.timestamp) AS tempo_pub, gostos.ref_id_utilizadores FROM publicacoes INNER JOIN utilizadores ON id_utilizadores = ref_id_utilizadores LEFT JOIN seguidores ON seguidores.ref_id_utilizadores_seguir = id_utilizadores AND seguidores.ref_id_utilizadores = ? LEFT JOIN gostos ON gostos.ref_id_publicacoes = id_publicacoes AND gostos.ref_id_utilizadores = ? ORDER BY publicacoes.timestamp DESC LIMIT ?, ?;`,
       [uid, uid, page, limit],
       (err, rows) => {
         if (err) return reject(err);
 
-        const rows_eventos = rows.map((el) => {
-          const eventosPromise = new Promise((resolve, reject) => {
-            pool.query(
-              `SELECT eventos.id_eventos, eventos.nome FROM eventos LEFT JOIN pub_associadas_eventos on eventos.id_eventos = pub_associadas_eventos.ref_id_eventos WHERE pub_associadas_eventos.ref_id_publicacoes = ?`,
-              [el.id_pub],
-              (err, rows) => {
-                if (err) return reject(err);
-
-                return resolve(rows);
-              }
-            );
-          });
-
-          function myDisplayer(some) {
-            return some;
-          }
-
-          eventosPromise.then(
-            function (value) {
-              myDisplayer(value);
-            },
-            function (error) {
-              console.log(error);
-            }
-          );
-        });
-
-        return resolve(rows_eventos);
+        return resolve(rows);
       }
     );
   });

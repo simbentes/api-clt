@@ -1,18 +1,15 @@
-/* eslint-disable operator-linebreak */
-const jwt = require('jsonwebtoken');
-const { UserModel, RoleModel } = require('../models');
+/*
+const jwt = require("jsonwebtoken");
+const { UserModel, RoleModel } = require("../models");
 
-const { UnauthorizedError } = require('../utils/errors');
+const { UnauthorizedError } = require("../utils/errors");
 
 module.exports = async function authMiddleware(req, res, next) {
   const { authorization } = req.headers;
   if (req.user) next();
 
   // retirar o token do header do request
-  const token =
-    authorization &&
-    authorization.split(' ')[0] === 'Bearer' &&
-    authorization.split(' ')[1];
+  const token = authorization && authorization.split(" ")[0] === "Bearer" && authorization.split(" ")[1];
 
   if (token) {
     try {
@@ -25,7 +22,7 @@ module.exports = async function authMiddleware(req, res, next) {
     if (exp > Math.floor(Date.now() / 1000)) {
       const user = await UserModel.findByPk(id, {
         include: [RoleModel],
-        attributes: { exclude: ['RoleId', 'password'] },
+        attributes: { exclude: ["RoleId", "password"] },
       });
 
       if (user) {
@@ -36,4 +33,4 @@ module.exports = async function authMiddleware(req, res, next) {
   } else {
     next();
   }
-};
+}; */
