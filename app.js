@@ -8,6 +8,7 @@ const indexRouter = require("./routes/index");
 const memoriaRouter = require("./routes/memoria");
 const articleRouter = require("./routes/article");
 const userRouter = require("./routes/user");
+const eventoRouter = require("./routes/evento");
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -20,6 +21,7 @@ app.use("/", indexRouter);
 app.use("/memoria", memoriaRouter);
 app.use("/article", articleRouter);
 app.use("/user", userRouter);
+app.use("/evento", eventoRouter);
 
 app.use((err, req, res, next) => {
   if (err && !res.headersSent) {
