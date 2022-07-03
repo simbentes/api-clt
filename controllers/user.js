@@ -98,12 +98,12 @@ async function login(req, res) {
     console.log(match);
 
     if (match) {
-      const token = generateToken(user);
+      const token = generateToken(user.uid);
 
       user.password = undefined;
 
       res.send(
-        success(user, {
+        success(user.uid, {
           token,
         })
       );

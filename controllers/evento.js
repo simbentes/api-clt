@@ -26,12 +26,22 @@ const getAll = async (req, res) => {
 };
 
 const getEvento = async (req, res) => {
+  const { uid } = req;
   const { idEvento } = req.params;
 
   try {
-    let res_evento = await evento.getevento(idEvento);
+    let res_evento = await Promise.all([evento.getevento(uid, idEvento), evento.getDatasEvento(idEvento)], evento.getVou(idEvento));
+
+    //count vou
+    console.log(res_evento[2]);
+
+    let obj_evento = {
+      ...res_evento[0][0],
+      datas_evento: res_evento[1],
+    };
+
     res.json(
-      success(res_evento, {
+      success(obj_evento, {
         limit: 1,
         currentPage: 0,
       })
@@ -39,6 +49,7 @@ const getEvento = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
+    n;
   }
 };
 
