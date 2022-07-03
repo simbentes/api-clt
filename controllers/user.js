@@ -3,6 +3,8 @@ const { generateToken } = require("../utils/auth");
 const { ConflictError, NotFoundError, UnauthorizedError, BadRequest } = require("../utils/errors");
 const { getPaginationProps } = require("../utils/pagination");
 const { user } = require("../database");
+const db = require("../database");
+const bcrypt = require("bcrypt");
 
 async function getById(req, res) {
   const { id } = req.params;
@@ -35,19 +37,27 @@ async function getAll(req, res) {
 }
 
 async function register(req, res) {
-  const { firstName, lastName, username, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
-  const user_res = await user.register(firstName, lastName, username, email, password);
+  try {
+    const password_hash = await bcrypt.hash(password, 10);
 
-  console.log(user_res);
+    const user_res = await user.register(firstName, lastName, email, password_hash);
 
-  if (user_res.status === 200) {
-    user.password = undefined;
-    const token = generateToken(user);
+    console.log("1111::::::", user_res);
+    console.log("2222::::::", user_res.status);
 
-    res.json(success(user, { token }));
-  } else {
-    throw new ConflictError("User with that email already exists");
+    if (user_res.affectedRows === 1) {
+      const { insertId: uid } = user_res;
+
+      const token = generateToken(uid);
+
+      res.json(success(user, { token }));
+    } else {
+      throw new ConflictError("User with that email already exists");
+    }
+  } catch (err) {
+    throw new ConflictError("Duplicate information.");
   }
 }
 
@@ -69,39 +79,23 @@ async function update(req, res) {
   res.json(success(userData));
 }
 
-async function destroy(req, res) {
-  const { id } = req.params;
-
-  const userData = await userModel.findByPk(id, {
-    include: [RoleModel],
-  });
-
-  if (!userData) {
-    throw new NotFoundError("user not found");
-  }
-
-  await userModel.destroy({
-    where: {
-      id,
-    },
-  });
-
-  res.json(success(userData, {}, "Successfully removed user"));
-}
+//
+//
+//
+//
 
 async function login(req, res) {
   const { email, password } = req.body;
 
-  const users = await userModel.findAll({
-    where: {
-      email,
-    },
-  });
+  const users = await user.findByEmail(email);
 
   if (users.length !== 0) {
     const [user] = users;
 
-    const match = await user.validatePassword(password);
+    //verificar se a password é igual
+    const match = await bcrypt.compare(password, user.password);
+
+    console.log(match);
 
     if (match) {
       const token = generateToken(user);
@@ -123,10 +117,34 @@ async function login(req, res) {
   throw BadRequest("Invalid credentials");
 }
 
+//
+//
+//
+//
+
 async function auth(req, res) {
   res.send(success(req.user));
 }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -181,68 +199,15 @@ async function unfollow(req, res) {
   throw new ConflictError("Already unfollowing the user");
 }
 
-async function getFollowers(req, res) {
-  const { id } = req.params;
-
-  const paginationProps = getPaginationProps(req.query, "firstName", "firstName");
-
-  const userData = await userModel.findByPk(id);
-
-  if (userData) {
-    const data = await userData.getFollowers({
-      ...paginationProps,
-      attributes: { exclude: ["password"] },
-    });
-    const count = await userData.countFollowers();
-
-    res.send(
-      success(data, {
-        total: count,
-        ...paginationProps,
-      })
-    );
-  } else {
-    throw new NotFoundError("user not found");
-  }
-}
-
-async function getFollowees(req, res) {
-  const { id } = req.params;
-
-  const paginationProps = getPaginationProps(req.query, "firstName", "firstName");
-
-  const userData = await userModel.findByPk(id);
-
-  if (userData) {
-    const data = await userData.getFollowees({
-      ...paginationProps,
-      attributes: { exclude: ["password"] },
-    });
-    const count = await userData.countFollowees();
-
-    res.send(
-      success(data, {
-        total: count,
-        ...paginationProps,
-      })
-    );
-  } else {
-    throw new NotFoundError("user not found");
-  }
-}
-
 const userController = {
   getById,
   getAll,
   update,
-  destroy,
   register,
   login,
   auth,
   follow,
   unfollow,
-  getFollowers,
-  getFollowees,
 };
 
 module.exports = userController;

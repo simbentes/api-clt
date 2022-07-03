@@ -9,19 +9,20 @@ const memoriaRouter = require("./routes/memoria");
 const articleRouter = require("./routes/article");
 const userRouter = require("./routes/user");
 const eventoRouter = require("./routes/evento");
+const authenticatedMiddleware = require("./middlewares/authenticatedMiddleware");
 
 const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//app.use(authMiddleware);
+app.use(authMiddleware);
 
 app.use("/", indexRouter);
-app.use("/memoria", memoriaRouter);
-app.use("/article", articleRouter);
+app.use("/memoria", authenticatedMiddleware, memoriaRouter);
+app.use("/article", authenticatedMiddleware, articleRouter);
 app.use("/user", userRouter);
-app.use("/evento", eventoRouter);
+app.use("/evento", authenticatedMiddleware, eventoRouter);
 
 app.use((err, req, res, next) => {
   if (err && !res.headersSent) {

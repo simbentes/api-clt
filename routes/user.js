@@ -20,9 +20,9 @@ router.post(
 );
 
 router.post("/login", validationMiddleware(body("email").isEmail().toLowerCase(), body("password").notEmpty()), userController.login);
+
 router.get("/", userController.getAll);
 router.get("/:id", userController.getById);
 router.put("/:id", userController.update);
-router.delete("/:id", userController.destroy);
 
 module.exports = router;
