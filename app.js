@@ -16,13 +16,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//app.use(authMiddleware);
+app.use(authMiddleware);
 
 app.use("/", indexRouter);
 app.use("/memoria", memoriaRouter);
 app.use("/article", articleRouter);
 app.use("/user", userRouter);
-app.use("/evento", authenticatedMiddleware, eventoRouter);
+app.use("/evento", eventoRouter);
 
 app.use((err, req, res, next) => {
   if (err && !res.headersSent) {
