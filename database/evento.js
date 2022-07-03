@@ -57,4 +57,18 @@ evento.getVou = (id_evento) => {
   });
 };
 
+evento.getPub = (id_evento, uid) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT id_publicacoes AS id_pub, texto AS message, foto AS img, id_utilizadores AS user_id, CONCAT(utilizadores.nome, ' ', apelido) AS username, utilizadores.foto_perfil AS user_avatar, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(publicacoes.timestamp) AS time_ago, gostos.ref_id_utilizadores AS "like" FROM publicacoes INNER JOIN utilizadores ON id_utilizadores = ref_id_utilizadores LEFT JOIN pub_associadas_eventos on pub_associadas_eventos.ref_id_publicacoes = id_publicacoes LEFT JOIN seguidores ON seguidores.ref_id_utilizadores_seguir = id_utilizadores AND seguidores.ref_id_utilizadores = ? LEFT JOIN gostos ON gostos.ref_id_publicacoes = id_publicacoes AND gostos.ref_id_utilizadores = ? WHERE pub_associadas_eventos.ref_id_eventos = ? ORDER BY publicacoes.timestamp DESC`,
+      [uid, uid, id_evento],
+      (err, rows) => {
+        if (err) return reject(err);
+        console.log(rows);
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 module.exports = evento;
