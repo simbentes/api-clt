@@ -71,4 +71,18 @@ evento.getPub = (id_evento, uid) => {
   });
 };
 
+evento.getFotos = (id_evento) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT foto AS url FROM fotos_eventos INNER JOIN eventos ON eventos.id_eventos = fotos_eventos.ref_id_eventos WHERE id_eventos = ?;`,
+      [id_evento],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 module.exports = evento;

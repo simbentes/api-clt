@@ -29,7 +29,13 @@ const getMemoria = async (req, res) => {
   const { idEvento } = req.params;
 
   try {
-    let res_memoria = await memoria.getMemoria(idEvento);
+    const res_sql = await Promise.all([memoria.getMemoria(idEvento), evento.getFotos(idEvento)]);
+
+    const res_memoria = {
+      ...res_sql[0][0],
+      images: res_sql[1],
+    };
+
     res.json(
       success(res_memoria, {
         limit: 1,
