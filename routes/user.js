@@ -22,7 +22,7 @@ router.post(
 
 router.post("/login", validationMiddleware(body("email").isEmail().toLowerCase(), body("password").notEmpty()), userController.login);
 
-router.route("/", authenticatedMiddleware).get(userController.get).put(userController.update);
+router.route("/").get(authenticatedMiddleware, userController.get).put(authenticatedMiddleware, userController.update);
 router.get("/:id", userController.getById);
 router.put("/:id", userController.update);
 
