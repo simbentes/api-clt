@@ -57,27 +57,18 @@ async function register(req, res) {
 }
 
 async function update(req, res) {
-  const { id } = req.params;
-  const { firstName, lastName, summary } = req.body;
+  const { uid } = req;
 
-  const userData = await userModel.findByPk(id, {
-    include: [RoleModel],
-    attributes: { exclude: ["RoleId"] },
-  });
+  const { firstName, lastName, img, bio, instagram, whatsapp } = req.body;
 
-  if (firstName) userData.firstName = firstName;
-  if (lastName) userData.lastName = lastName;
-  if (summary) userData.summary = summary;
-
-  await userData.save();
-
-  res.json(success(userData));
+  try {
+    await user.update(firstName, lastName, img, bio, instagram, whatsapp, uid);
+    res.json(success());
+  } catch (err) {
+    console.log(err);
+    throw new ConflictError("Error.");
+  }
 }
-
-//
-//
-//
-//
 
 async function login(req, res) {
   const { email, password } = req.body;

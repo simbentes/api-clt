@@ -43,4 +43,18 @@ user.getById = (uid) => {
   });
 };
 
+user.update = (firstName, lastName, img, bio, instagram, whatsapp, uid) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE utilizadores SET nome=?, apelido=?, foto_perfil=?, biografia=?, instagram=?, whatsapp=? WHERE id_utilizadores = ?`,
+      [firstName, lastName, img, bio, instagram, whatsapp, uid],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 module.exports = user;
