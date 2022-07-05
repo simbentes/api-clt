@@ -3,12 +3,13 @@ const { NotFoundError } = require("../utils/errors");
 const { pub, evento } = require("../database");
 
 const getAll = async (req, res) => {
+  const { uid } = req;
   let { lastId = 9999999999, limit = 4 } = req.query;
   lastId = parseInt(lastId);
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([pub.getAll(lastId, limit), pub.getEvent(lastId, limit)]);
+    let resp = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId, limit)]);
     //let res = [pub.getAll(lastId, limit), pub.getEvent(lastId, limit), pub.getComments(lastId, limit)];
 
     let resp_pub_event = resp[1];
@@ -54,8 +55,39 @@ const getAll = async (req, res) => {
   }
 };
 
+const getComments = async (req, res) => {
+  const { uid } = req;
+  const { idPub } = req.params;
+
+  try {
+    const resp = await pub.getComments(uid, idPub);
+
+    console.log(resp);
+
+    const resp_comment = resp.map((el) => {
+      return {
+        id: el.id_comment,
+        comment: el.comment,
+        user: {
+          name: el.name,
+          id: el.id_user,
+          img: el.foto_perfil,
+        },
+        time: el.time,
+        like: !el.like ? false : true,
+      };
+    });
+
+    res.json(success(resp_comment));
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const pubController = {
   getAll,
+  getComments,
 };
 
 module.exports = pubController;

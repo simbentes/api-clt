@@ -4,5 +4,6 @@ const router = express.Router();
 const authenticatedMiddleware = require("../middlewares/authenticatedMiddleware");
 
 router.get("/", authenticatedMiddleware, pubController.getAll);
+router.get("/:idPub/comments", authenticatedMiddleware, pubController.getComments);
 
 module.exports = router;
