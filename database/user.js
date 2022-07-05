@@ -29,4 +29,18 @@ user.findByEmail = (email) => {
   });
 };
 
+user.getById = (uid) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "SELECT id_utilizadores AS uid, nome AS firstName, apelido AS lastName, foto_perfil AS img, biografia AS bio, email, instagram, whatsapp FROM utilizadores WHERE id_utilizadores = ?",
+      uid,
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 module.exports = user;

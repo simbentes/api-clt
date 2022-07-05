@@ -6,6 +6,17 @@ const { user } = require("../database");
 const db = require("../database");
 const bcrypt = require("bcrypt");
 
+async function get(req, res) {
+  const { uid } = req;
+  try {
+    const user_res = await user.getById(uid);
+
+    res.json(success(user_res));
+  } catch (err) {
+    throw new NotFoundError("User not found");
+  }
+}
+
 async function getById(req, res) {
   const { id } = req.params;
 
@@ -18,22 +29,6 @@ async function getById(req, res) {
   } else {
     throw new NotFoundError("user not found");
   }
-}
-
-async function getAll(req, res) {
-  const { user } = req;
-  const excludeFields = ["password"];
-
-  if (!user) excludeFields.push("email");
-
-  const paginationProps = getPaginationProps(req.query, "firstName", "firstName");
-
-  const { count, rows } = await userModel.findAndCountAll({
-    attributes: { exclude: excludeFields },
-    ...paginationProps,
-  });
-
-  res.json(success(rows, { total: count, ...paginationProps }));
 }
 
 async function register(req, res) {
@@ -200,8 +195,8 @@ async function unfollow(req, res) {
 }
 
 const userController = {
+  get,
   getById,
-  getAll,
   update,
   register,
   login,

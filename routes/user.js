@@ -2,6 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const { userController } = require("../controllers");
 const { validationMiddleware } = require("../middlewares/validationMiddleware");
+const authenticatedMiddleware = require("../middlewares/authenticatedMiddleware");
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.post(
 
 router.post("/login", validationMiddleware(body("email").isEmail().toLowerCase(), body("password").notEmpty()), userController.login);
 
-router.get("/", userController.getAll);
+router.get("/", authenticatedMiddleware, userController.get);
 router.get("/:id", userController.getById);
 router.put("/:id", userController.update);
 
