@@ -69,7 +69,7 @@ const getPub = async (req, res) => {
     console.log("JKANDSSJAJKNDKJADSKSDJNKNKJ::::::::::: ", resp_pub_event);
 
     let resp_pub = resp[0].map((el) => {
-      let evento = resp[1].filter((element) => {
+      let evento = resp[1].find((element) => {
         return element.id_pub === el.id_pub;
       });
 
