@@ -3,17 +3,30 @@ const { NotFoundError } = require("../utils/errors");
 const { pub, evento } = require("../database");
 
 const getAll = async (req, res) => {
-  let { lastId = 0, limit = 4 } = req.query;
+  let { lastId = 9999999999, limit = 4 } = req.query;
   lastId = parseInt(lastId);
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([pub.getAll(lastId, limit)]);
+    let resp = await Promise.all([pub.getAll(lastId, limit), pub.getEvent(lastId, limit)]);
     //let res = [pub.getAll(lastId, limit), pub.getEvent(lastId, limit), pub.getComments(lastId, limit)];
 
-    console.log(resp);
+    let resp_pub_event = resp[1];
+
+    console.log(resp_pub_event);
 
     let resp_pub = resp[0].map((el) => {
+      let evento = resp[1].find((element) => {
+        return element.id_pub === el.id_pub;
+      });
+
+      if (evento) {
+        evento = {
+          id: evento.id_eventos,
+          title: evento.nome,
+        };
+      }
+
       return {
         id: el.id_pub,
         title: el.title,
@@ -23,7 +36,9 @@ const getAll = async (req, res) => {
           id: el.id_user,
           img: el.foto_perfil,
         },
-        event: null,
+        time: el.time,
+        event: evento ? evento : null,
+        like: !el.like ? false : true,
       };
     });
 
