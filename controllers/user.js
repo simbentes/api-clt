@@ -11,7 +11,7 @@ async function get(req, res) {
   try {
     const user_res = await user.getById(uid);
 
-    res.json(success(user_res));
+    res.json(success(...user_res));
   } catch (err) {
     throw new NotFoundError("User not found");
   }
