@@ -4,7 +4,7 @@ const { pub, evento } = require("../database");
 
 const getAll = async (req, res) => {
   const { uid } = req;
-  let { lastId = 9999999999, limit = 4 } = req.query;
+  let { lastId = 9999999999, limit = 6 } = req.query;
   lastId = parseInt(lastId);
   limit = parseInt(limit);
 
