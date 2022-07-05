@@ -48,28 +48,9 @@ const getMemoria = async (req, res) => {
   }
 };
 
-const getPub = async (req, res) => {
-  const { uid } = req;
-  const { idEvento } = req.params;
-
-  try {
-    let res_memoria = await evento.getPub(idEvento, uid);
-    res.json(
-      success(res_memoria, {
-        limit: 1,
-        currentPage: 0,
-      })
-    );
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-};
-
 const ArticleController = {
   getAll,
   getMemoria,
-  getPub,
 };
 
 module.exports = ArticleController;

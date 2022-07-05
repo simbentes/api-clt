@@ -6,6 +6,4 @@ const authenticatedMiddleware = require("../middlewares/authenticatedMiddleware"
 router.get("/", memoriaController.getAll);
 router.get("/:idEvento", memoriaController.getMemoria);
 
-router.get("/:idEvento/pub", authenticatedMiddleware, memoriaController.getPub);
-
 module.exports = router;

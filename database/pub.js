@@ -15,7 +15,7 @@ pub.getAll = (uid, lastId, limit) => {
   });
 };
 
-pub.getEvent = (lastId, limit) => {
+pub.getEvent = (lastId) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT id_publicacoes AS id_pub, id_eventos, nome FROM eventos INNER JOIN pub_associadas_eventos ON id_eventos = ref_id_eventos INNER JOIN publicacoes ON ref_id_publicacoes = id_publicacoes WHERE id_publicacoes < ? ORDER BY publicacoes.timestamp DESC LIMIT 0,3`,

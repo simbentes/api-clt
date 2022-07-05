@@ -9,8 +9,7 @@ const getAll = async (req, res) => {
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId, limit)]);
-    //let res = [pub.getAll(lastId, limit), pub.getEvent(lastId, limit), pub.getComments(lastId, limit)];
+    let resp = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId)]);
 
     let resp_pub_event = resp[1];
 
@@ -46,7 +45,7 @@ const getAll = async (req, res) => {
     res.json(
       success(resp_pub, {
         limit,
-        lastId: lastId,
+        lastId: resp_pub[resp_pub.length - 1] && resp_pub[resp_pub.length - 1].id,
       })
     );
   } catch (err) {
