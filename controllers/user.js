@@ -157,33 +157,59 @@ async function follow(req, res) {
   throw new ConflictError("Already following the user");
 }
 
-async function unfollow(req, res) {
-  const { user } = req;
-  const { id } = req.params;
+const getPub = async (req, res) => {
+  const { uid } = req;
+  const { idEvento } = req.params;
+  let { lastId = 9999999999, limit = 3 } = req.query;
+  lastId = parseInt(lastId);
+  limit = parseInt(limit);
 
-  const isFollowinguser = await user.getFollowees({
-    where: {
-      id,
-    },
-  });
+  try {
+    let resp = await Promise.all([evento.getPub(uid, idEvento, lastId, limit), pub.getEvent_event(idEvento, lastId, limit)]);
 
-  if (isFollowinguser?.length) {
-    const result = await user.removeFollowee(id);
-    res.send(
-      success(
-        {
-          success: result,
+    let resp_pub_event = resp[1];
+
+    console.log("JKANDSSJAJKNDKJADSKSDJNKNKJ::::::::::: ", resp_pub_event);
+
+    let resp_pub = resp[0].map((el) => {
+      let evento = resp[1].find((element) => {
+        console.log(element.id_pub, ":::///:::///::", el.id_pub);
+        return element.id_pub === el.id_pub;
+      });
+
+      if (evento != undefined) {
+        evento = {
+          id: evento.id_eventos,
+          title: evento.nome,
+        };
+      }
+
+      return {
+        id: el.id_pub,
+        title: el.title,
+        img: el.img,
+        user: {
+          name: el.name,
+          id: el.id_user,
+          img: el.foto_perfil,
         },
-        {},
-        "Success unfollowing"
-      )
+        time: el.time,
+        event: evento ? evento : null,
+        like: !el.like ? false : true,
+      };
+    });
+
+    res.json(
+      success(resp_pub, {
+        limit,
+        lastId: resp_pub[resp_pub.length - 1] && resp_pub[resp_pub.length - 1].id,
+      })
     );
-
-    return;
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
   }
-
-  throw new ConflictError("Already unfollowing the user");
-}
+};
 
 const userController = {
   get,
@@ -193,7 +219,7 @@ const userController = {
   login,
   auth,
   follow,
-  unfollow,
+  getPub,
 };
 
 module.exports = userController;

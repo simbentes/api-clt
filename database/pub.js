@@ -29,6 +29,34 @@ pub.getEvent = (lastId) => {
   });
 };
 
+pub.getEvent_profile = (lastId) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT id_publicacoes AS id_pub, id_eventos, nome FROM eventos INNER JOIN pub_associadas_eventos ON id_eventos = ref_id_eventos INNER JOIN publicacoes ON ref_id_publicacoes = id_publicacoes WHERE id_publicacoes < ? ORDER BY publicacoes.timestamp DESC LIMIT 0,3`,
+      lastId,
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
+pub.getEvent_event = (idEvento, lastId, limit) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT id_publicacoes AS id_pub, id_eventos, nome FROM eventos INNER JOIN pub_associadas_eventos ON id_eventos = ref_id_eventos INNER JOIN publicacoes ON ref_id_publicacoes = id_publicacoes WHERE pub_associadas_eventos.ref_id_eventos = ? AND id_publicacoes < ? ORDER BY publicacoes.timestamp DESC LIMIT 0, ?`,
+      [idEvento, lastId, limit],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 pub.getComments = (uid, idPub) => {
   return new Promise((resolve, reject) => {
     pool.query(

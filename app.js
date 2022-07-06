@@ -10,6 +10,7 @@ const articleRouter = require("./routes/article");
 const userRouter = require("./routes/user");
 const eventoRouter = require("./routes/evento");
 const pubRouter = require("./routes/pub");
+const commentRouter = require("./routes/comment");
 const authenticatedMiddleware = require("./middlewares/authenticatedMiddleware");
 
 const port = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use("/article", articleRouter);
 app.use("/user", userRouter);
 app.use("/evento", eventoRouter);
 app.use("/pub", pubRouter);
+app.use("/comment", commentRouter);
 
 app.use((err, req, res, next) => {
   if (err && !res.headersSent) {

@@ -61,19 +61,19 @@ const getPub = async (req, res) => {
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([evento.getPub(uid, idEvento, lastId, limit), pub.getEvent(lastId)]);
+    let resp = await Promise.all([evento.getPub(uid, idEvento, lastId, limit), pub.getEvent_event(idEvento, lastId, limit)]);
 
     let resp_pub_event = resp[1];
 
     console.log("JKANDSSJAJKNDKJADSKSDJNKNKJ::::::::::: ", resp_pub_event);
-    console.log("JKANDSSJAJKNDKJADSKSDJNKNKJ::::::::::: ", resp_pub_event);
 
     let resp_pub = resp[0].map((el) => {
       let evento = resp[1].find((element) => {
+        console.log(element.id_pub, ":::///:::///::", el.id_pub);
         return element.id_pub === el.id_pub;
       });
 
-      if (evento) {
+      if (evento != undefined) {
         evento = {
           id: evento.id_eventos,
           title: evento.nome,

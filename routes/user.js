@@ -25,5 +25,6 @@ router.post("/login", validationMiddleware(body("email").isEmail().toLowerCase()
 router.route("/").get(authenticatedMiddleware, userController.get).put(authenticatedMiddleware, userController.update);
 router.get("/:id", userController.getById);
 router.put("/:id", userController.update);
+router.put("/pub", validationMiddleware, userController.getPub);
 
 module.exports = router;

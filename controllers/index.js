@@ -3,6 +3,7 @@ const articleController = require("./article");
 const userController = require("./user");
 const eventoController = require("./evento");
 const pubController = require("./pub");
+const commentController = require("./comment");
 
 const Controllers = {
   memoriaController,
@@ -10,6 +11,7 @@ const Controllers = {
   userController,
   eventoController,
   pubController,
+  commentController,
 };
 
 module.exports = Controllers;
