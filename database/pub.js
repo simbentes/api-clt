@@ -60,7 +60,7 @@ pub.getEvent_event = (idEvento, lastId, limit) => {
 pub.getComments = (uid, idPub) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT id_comentarios AS id_comment, comentarios.texto AS "comment", id_utilizadores AS id_user, CONCAT(utilizadores.nome, ' ', apelido) AS "name", utilizadores.foto_perfil AS img, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(comentarios.timestamp) AS "time", gostos.ref_id_utilizadores AS "like" FROM comentarios INNER JOIN utilizadores ON id_utilizadores = ref_id_utilizadores INNER JOIN publicacoes on publicacoes.id_publicacoes = comentarios.ref_id_publicacoes LEFT JOIN seguidores ON seguidores.ref_id_utilizadores_seguir = id_utilizadores AND seguidores.ref_id_utilizadores = ? LEFT JOIN gostos ON gostos.ref_id_comentarios = id_comentarios AND gostos.ref_id_utilizadores = ? WHERE id_publicacoes = ? ORDER BY comentarios.timestamp DESC`,
+      `SELECT id_comentarios AS id_comment, comentarios.texto AS "comment", id_utilizadores AS id_user, CONCAT(utilizadores.nome, ' ', apelido) AS "name", utilizadores.foto_perfil AS img, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(comentarios.timestamp) AS "time", gostos_comentarios.ref_id_utilizadores AS "like" FROM comentarios INNER JOIN utilizadores ON id_utilizadores = ref_id_utilizadores INNER JOIN publicacoes on publicacoes.id_publicacoes = comentarios.ref_id_publicacoes LEFT JOIN seguidores ON seguidores.ref_id_utilizadores_seguir = id_utilizadores AND seguidores.ref_id_utilizadores = ? LEFT JOIN gostos_comentarios ON gostos_comentarios.ref_id_comentarios = id_comentarios AND gosto_comentarios.ref_id_utilizadores = ? WHERE id_publicacoes = ? ORDER BY comentarios.timestamp DESC`,
       [uid, uid, idPub],
       (err, rows) => {
         if (err) return reject(err);
