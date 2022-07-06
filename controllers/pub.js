@@ -84,9 +84,29 @@ const getComments = async (req, res) => {
   }
 };
 
+const like = async (req, res) => {
+  const { uid } = req;
+  const { idPub } = req.params;
+  const { like } = req.query;
+
+  try {
+    if (like == 1) {
+      await pub.like(uid, idPub);
+    } else {
+      await pub.dont_like(uid, idPub);
+    }
+
+    res.json(success());
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const pubController = {
   getAll,
   getComments,
+  like,
 };
 
 module.exports = pubController;
