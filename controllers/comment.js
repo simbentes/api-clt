@@ -8,11 +8,10 @@ const like = async (req, res) => {
   const { like } = req.query;
 
   try {
-    let resp = {};
-    if (like == 0) {
-      resp = await comment.like(uid, idComment);
+    if (like == 1) {
+      await comment.like(uid, idComment);
     } else {
-      resp = await comment.dont_like(uid, idComment);
+      await comment.dont_like(uid, idComment);
     }
 
     res.json(success());
