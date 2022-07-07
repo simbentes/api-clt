@@ -7,12 +7,8 @@ const getAll = async (req, res) => {
   page = parseInt(page);
   limit = parseInt(limit);
 
-  const offset = +page * +limit;
-  // page 0, limit 10 = start 0, end 10
-  // page 1, limit 10 = start 10, end 20
-
   try {
-    let res_evento = await evento.getAll(page, limit);
+    let res_evento = await evento.getAll();
     res.json(
       success(res_evento, {
         limit,
