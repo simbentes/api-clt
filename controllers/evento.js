@@ -25,6 +25,30 @@ const getAll = async (req, res) => {
   }
 };
 
+const getSaved = async (req, res) => {
+  const { uid } = req;
+  let { page = 0, limit = 4 } = req.query;
+  page = parseInt(page);
+  limit = parseInt(limit);
+
+  const offset = +page * +limit;
+  // page 0, limit 10 = start 0, end 10
+  // page 1, limit 10 = start 10, end 20
+
+  try {
+    let res_evento = await evento.getSaved(uid);
+    res.json(
+      success(res_evento, {
+        limit,
+        currentPage: page,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const getEvento = async (req, res) => {
   const { uid } = req;
   const { idEvento } = req.params;
@@ -49,7 +73,6 @@ const getEvento = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
-    n;
   }
 };
 
@@ -110,6 +133,7 @@ const getPub = async (req, res) => {
 const EventoController = {
   getAll,
   getEvento,
+  getSaved,
   getPub,
 };
 
