@@ -57,6 +57,20 @@ pub.getEvent_event = (idEvento, lastId, limit) => {
   });
 };
 
+pub.getEvent_user = (uid, lastId, limit) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT id_publicacoes AS id_pub, id_eventos, eventos.nome FROM eventos INNER JOIN pub_associadas_eventos ON id_eventos = ref_id_eventos INNER JOIN publicacoes ON ref_id_publicacoes = id_publicacoes INNER JOIN utilizadores ON utilizadores.id_utilizadores = publicacoes.ref_id_utilizadores WHERE utilizadores.id_utilizadores = ? AND id_publicacoes < ? ORDER BY publicacoes.timestamp DESC LIMIT 0, ?`,
+      [uid, lastId, limit],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 pub.getComments = (uid, idPub) => {
   return new Promise((resolve, reject) => {
     pool.query(

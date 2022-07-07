@@ -2,7 +2,7 @@ const { success } = require("../utils/apiResponse");
 const { generateToken } = require("../utils/auth");
 const { ConflictError, NotFoundError, UnauthorizedError, BadRequest } = require("../utils/errors");
 const { getPaginationProps } = require("../utils/pagination");
-const { user } = require("../database");
+const { user, pub } = require("../database");
 const db = require("../database");
 const bcrypt = require("bcrypt");
 
@@ -14,20 +14,6 @@ async function get(req, res) {
     res.json(success(...user_res));
   } catch (err) {
     throw new NotFoundError("User not found");
-  }
-}
-
-async function getById(req, res) {
-  const { id } = req.params;
-
-  const userData = await userModel.findByPk(id, {
-    include: [RoleModel],
-    attributes: { exclude: ["password"] },
-  });
-  if (userData) {
-    res.json(success(userData));
-  } else {
-    throw new NotFoundError("user not found");
   }
 }
 
@@ -159,17 +145,16 @@ async function follow(req, res) {
 
 const getPub = async (req, res) => {
   const { uid } = req;
-  const { idEvento } = req.params;
+  const { idUser } = req.params;
   let { lastId = 9999999999, limit = 3 } = req.query;
   lastId = parseInt(lastId);
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([evento.getPub(uid, idEvento, lastId, limit), pub.getEvent_event(idEvento, lastId, limit)]);
+    let resp = await Promise.all([user.getPub(uid, lastId, limit), pub.getEvent_user(uid, lastId, limit)]);
 
-    let resp_pub_event = resp[1];
-
-    console.log("JKANDSSJAJKNDKJADSKSDJNKNKJ::::::::::: ", resp_pub_event);
+    console.log(resp[0], "INFO PUB");
+    console.log(resp[1]), "INFO PUB EVENTO ASSOCIADO";
 
     let resp_pub = resp[0].map((el) => {
       let evento = resp[1].find((element) => {
@@ -179,7 +164,7 @@ const getPub = async (req, res) => {
 
       if (evento != undefined) {
         evento = {
-          id: evento.id_eventos,
+          id: evento.id,
           title: evento.nome,
         };
       }
@@ -194,7 +179,7 @@ const getPub = async (req, res) => {
           img: el.foto_perfil,
         },
         time: el.time,
-        event: evento ? evento : null,
+        evento: evento ? evento : null,
         like: !el.like ? false : true,
       };
     });
@@ -213,7 +198,6 @@ const getPub = async (req, res) => {
 
 const userController = {
   get,
-  getById,
   update,
   register,
   login,

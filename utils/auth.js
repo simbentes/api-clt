@@ -7,7 +7,7 @@ function generateToken(uid) {
       sub: uid,
       iat: new Date().getTime(),
       // one day after
-      exp: new Date().setDate(new Date().getDate() + 1),
+      exp: new Date().setDate(new Date().getDate() + 6),
     },
     process.env.TOKEN_SECRET
   );
