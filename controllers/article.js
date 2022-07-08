@@ -41,9 +41,9 @@ const getAll = async (req, res) => {
     let config = pubAleatoria();
 
     if (config[0]) {
-      limit = 3;
+      limit = 4;
     } else {
-      limit = 2;
+      limit = 3;
     }
 
     let resp_pub = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId)]);
