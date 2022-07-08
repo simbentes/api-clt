@@ -85,6 +85,7 @@ const getAll = async (req, res) => {
       const resp_data_vou = await evento.getVou(id);
 
       resp_evento_valid = {
+        type: "event",
         ...resp_evento["0"],
         ...resp_data_vou["0"],
       };
