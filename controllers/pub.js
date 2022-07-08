@@ -103,10 +103,24 @@ const like = async (req, res) => {
   }
 };
 
+const send = async (req, res) => {
+  const { uid } = req;
+  const { idPub } = req.params;
+  const { like } = req.query;
+
+  try {
+    res.json(success({ img: "enviada." }));
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const pubController = {
   getAll,
   getComments,
   like,
+  send,
 };
 
 module.exports = pubController;
