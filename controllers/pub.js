@@ -104,12 +104,9 @@ const like = async (req, res) => {
 };
 
 const send = async (req, res) => {
-  const { uid } = req;
-  const { idPub } = req.params;
-  const { like } = req.query;
-
+  const { ola } = req.body;
   try {
-    res.json(success({ img: "enviada." }));
+    res.json(success({ img: "enviada.", ola }));
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
