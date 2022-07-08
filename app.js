@@ -16,7 +16,7 @@ const authenticatedMiddleware = require("./middlewares/authenticatedMiddleware")
 const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
-app.use(express.static("img"));
+app.use(express.static(__dirname + "/img"));
 app.use(express.urlencoded({ extended: false }));
 
 app.use(authMiddleware);
