@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 require("dotenv").config();
 const authMiddleware = require("./middlewares/authMiddleware");
+const bodyParser = require("body-parser");
 const { error } = require("./utils/apiResponse");
 
 const indexRouter = require("./routes/index");
@@ -18,6 +19,13 @@ const app = express();
 app.use(express.json());
 app.use(express.static(__dirname + "/img"));
 app.use(express.urlencoded({ extended: false }));
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
+
+app.use(bodyParser.json());
 
 app.use(authMiddleware);
 
