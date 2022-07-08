@@ -1,6 +1,6 @@
 const { success } = require("../utils/apiResponse");
 const { NotFoundError } = require("../utils/errors");
-const { article } = require("../database");
+const { article, pub, evento, memoria } = require("../database");
 
 const pubAleatoria = () => {
   let arraypubs = [];
@@ -32,13 +32,10 @@ const pubAleatoria = () => {
 };
 
 const getAll = async (req, res) => {
-  let { page = 0, uid = 1 } = req.query;
+  const { uid } = req;
+  let { lastId = 9999999999 } = req.query;
+  lastId = parseInt(lastId);
   let limit = 0;
-  page = parseInt(page);
-
-  const offset = +page * +limit;
-  // page 0, limit 10 = start 0, end 10
-  // page 1, limit 10 = start 10, end 20
 
   try {
     let config = pubAleatoria();
@@ -49,24 +46,68 @@ const getAll = async (req, res) => {
       limit = 2;
     }
 
-    let res_pub = await article.getPub(page, limit, uid);
-    let res_evento = [];
-    let res_memoria = [];
+    let resp_pub = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId)]);
+
+    let resp_pub_valid = resp_pub[0].map((el) => {
+      let evento = resp_pub[1].find((element) => {
+        return element.id_pub === el.id_pub;
+      });
+
+      if (evento) {
+        evento = {
+          id: evento.id_eventos,
+          title: evento.nome,
+        };
+      }
+
+      return {
+        type: "pub",
+        id: el.id_pub,
+        title: el.title,
+        img: el.img,
+        user: {
+          name: el.name,
+          id: el.id_user,
+          img: el.foto_perfil,
+        },
+        time: el.time,
+        event: evento ? evento : null,
+        like: !el.like ? false : true,
+      };
+    });
+
+    let resp_evento_valid;
+    let resp_memoria_valid;
 
     if (config[1]) {
-      res_evento = await article.getEvento();
+      const resp_evento = await evento.getRandom();
+      const { id } = resp_evento[0];
+      const resp_data_vou = await evento.getVou(id);
+
+      resp_evento_valid = {
+        ...resp_evento["0"],
+        ...resp_data_vou["0"],
+      };
     }
 
     if (config[2]) {
-      res_memoria = await article.getMemoria();
+      const resp_memoria = await memoria.getRandom();
+      resp_memoria_valid = {
+        type: "memory",
+        ...resp_memoria["0"],
+      };
+      console.log(resp_memoria, "resp memoria");
     }
 
-    let res_article = [...res_pub, ...res_evento, ...res_memoria];
+    let res_article = [...resp_pub_valid];
+    if (!config[0]) {
+      res_article = [...resp_pub_valid, resp_evento_valid || resp_memoria_valid];
+    }
 
     res.json(
       success(res_article, {
         limit,
-        currentPage: page,
+        lastId,
       })
     );
   } catch (err) {

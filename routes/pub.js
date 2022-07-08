@@ -4,7 +4,6 @@ const router = express.Router();
 const authenticatedMiddleware = require("../middlewares/authenticatedMiddleware");
 const multer = require("multer");
 const crypto = require("crypto");
-const { success } = require("../utils/apiResponse");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -20,10 +19,6 @@ router.get("/", authenticatedMiddleware, pubController.getAll);
 router.get("/:idPub/comments", authenticatedMiddleware, pubController.getComments);
 router.get("/:idPub/like", authenticatedMiddleware, pubController.like);
 
-router.post("/", pubController.send);
-
-router.get("/ola", (req, res) => {
-  res.json(success());
-});
+router.post("/", authenticatedMiddleware, upload.single("image"), pubController.send);
 
 module.exports = router;
