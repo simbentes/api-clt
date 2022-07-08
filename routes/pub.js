@@ -19,6 +19,6 @@ router.get("/", authenticatedMiddleware, pubController.getAll);
 router.get("/:idPub/comments", authenticatedMiddleware, pubController.getComments);
 router.get("/:idPub/like", authenticatedMiddleware, pubController.like);
 
-router.post("/", authenticatedMiddleware, upload.single("avatar"), pubController.send);
+router.post("/", authenticatedMiddleware, pubController.send);
 
 module.exports = router;
