@@ -108,7 +108,7 @@ const getAll = async (req, res) => {
     res.json(
       success(res_article, {
         limit,
-        lastId,
+        lastId: resp_pub_valid[resp_pub_valid.length - 1] && resp_pub_valid[resp_pub_valid.length - 1].id,
       })
     );
   } catch (err) {
