@@ -109,7 +109,7 @@ const send = async (req, res) => {
   const { like } = req.query;
 
   try {
-    res.json(success({ img: "enviada." }));
+    res.json(success({ img: "enviada.", info: req.file }));
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
