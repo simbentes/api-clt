@@ -57,7 +57,7 @@ const getEvento = async (req, res) => {
       preco_normal: res_evento.preco_normal,
       id_artistas: res_evento[0][0].id_artistas,
       guardado: res_evento[0][0].guardado ? true : false,
-      vou: res_evento[0][0].guardado ? true : false,
+      vou: res_evento[0][0].vou ? true : false,
       duracao: res_evento[0][0].duracao,
       classificacao_etaria: res_evento[0][0].classificacao_etaria,
       datas_evento: res_evento[1],
@@ -146,7 +146,7 @@ const action = async (req, res) => {
 
       if (guardar) {
         guardar = parseInt(guardar);
-
+        console.log(guardar, "GUARDAR");
         if (guardar === 0 || guardar === 1) await evento.updateGuardar(uid, idEvento, guardar);
       }
       //insert
@@ -159,6 +159,7 @@ const action = async (req, res) => {
       if (guardar) {
         guardar = parseInt(guardar);
 
+        console.log(guardar, "GUARDAR");
         if (guardar === 0 || guardar === 1) await evento.setGuardar(uid, idEvento, guardar);
       }
     }
