@@ -1,6 +1,7 @@
 const { success } = require("../utils/apiResponse");
 const { NotFoundError } = require("../utils/errors");
 const { pub, evento } = require("../database");
+const axios = require("axios").default;
 
 const getAll = async (req, res) => {
   const { uid } = req;
@@ -91,6 +92,17 @@ const like = async (req, res) => {
 
   try {
     if (like == 1) {
+      const notiToken = await pub.getNotiTokenByPubID(idPub);
+      console.log(notiToken);
+
+      // if (notiToken.length > 0) {
+      await axios.post("https://exp.host/--/api/v2/push/send", {
+        to: "ExponentPushToken[4cVCbWGXtZVEH1CphD9APA]",
+        title: `Agenda Cultural UA`,
+        body: `O user ${uid} deu like na tua publicação.`,
+      });
+      // }
+
       await pub.like(uid, idPub);
     } else {
       await pub.dont_like(uid, idPub);

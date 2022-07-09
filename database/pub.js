@@ -125,4 +125,18 @@ pub.assocEvent = (evento, pub) => {
   });
 };
 
+pub.getNotiTokenByPubID = (pub) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT notification_token FROM utilizadores WHERE id_utilizadores IN (SELECT ref_id_utilizadores FROM publicacoes WHERE id_publicacoes = ?);`,
+      pub,
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 module.exports = pub;
