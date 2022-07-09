@@ -108,6 +108,8 @@ const send = async (req, res) => {
   const { filename } = req.file;
   const { txt, refEvent } = req.body;
 
+  console.log(filename);
+
   const resp = await pub.send(txt, filename, uid);
 
   await pub.assocEvent(refEvent, resp.insertId);

@@ -45,10 +45,14 @@ async function register(req, res) {
 async function update(req, res) {
   const { uid } = req;
 
-  const { firstName, lastName, img, bio, instagram, whatsapp } = req.body;
+  let { filename } = req.file;
+
+  const { firstName, lastName, bio, instagram, whatsapp } = req.body;
+
+  if (!filename) filename = "default.webp";
 
   try {
-    await user.update(firstName, lastName, img, bio, instagram, whatsapp, uid);
+    await user.update(firstName, lastName, filename, bio, instagram, whatsapp, uid);
     res.json(success());
   } catch (err) {
     console.log(err);

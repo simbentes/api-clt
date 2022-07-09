@@ -3,8 +3,20 @@ const { body } = require("express-validator");
 const { userController } = require("../controllers");
 const { validationMiddleware } = require("../middlewares/validationMiddleware");
 const authenticatedMiddleware = require("../middlewares/authenticatedMiddleware");
+const multer = require("multer");
+const crypto = require("crypto");
 
 const router = express.Router();
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./img");
+  },
+  filename: function (req, file, cb) {
+    cb(null, crypto.randomBytes(20).toString("hex") + file.originalname.substring(file.originalname.indexOf(".")));
+  },
+});
+const upload = multer({ storage });
 
 // AUTH
 router.get("/auth", userController.auth);
@@ -22,10 +34,12 @@ router.post(
 
 router.post("/login", validationMiddleware(body("email").isEmail().toLowerCase(), body("password").notEmpty()), userController.login);
 
-router.route("/").get(authenticatedMiddleware, userController.get).put(authenticatedMiddleware, userController.update);
+router
+  .route("/")
+  .get(authenticatedMiddleware, userController.get)
+  .put(authenticatedMiddleware, upload.single("image"), userController.update);
 
 //router.get("/:id", userController.getById);
-router.put("/:id", userController.update);
 
 router.get("/pub", authenticatedMiddleware, userController.getPub);
 
