@@ -3,18 +3,9 @@ const { NotFoundError } = require("../utils/errors");
 const { evento, pub } = require("../database");
 
 const getAll = async (req, res) => {
-  let { page = 0, limit = 4 } = req.query;
-  page = parseInt(page);
-  limit = parseInt(limit);
-
   try {
     let res_evento = await evento.getAll();
-    res.json(
-      success(res_evento, {
-        limit,
-        currentPage: page,
-      })
-    );
+    res.json(success(res_evento));
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
@@ -23,13 +14,6 @@ const getAll = async (req, res) => {
 
 const getSaved = async (req, res) => {
   const { uid } = req;
-  let { page = 0, limit = 4 } = req.query;
-  page = parseInt(page);
-  limit = parseInt(limit);
-
-  const offset = +page * +limit;
-  // page 0, limit 10 = start 0, end 10
-  // page 1, limit 10 = start 10, end 20
 
   try {
     let res_evento = await evento.getSaved(uid);
@@ -58,6 +42,7 @@ const getEvento = async (req, res) => {
     let obj_evento = {
       ...res_evento[0][0],
       datas_evento: res_evento[1],
+      num_vou: res_evento[2] || 0,
     };
 
     res.json(
