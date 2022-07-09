@@ -32,7 +32,7 @@ const getEvento = async (req, res) => {
   const { idEvento } = req.params;
 
   try {
-    let res_evento = await Promise.all([evento.getevento(uid, idEvento), evento.getDatasEvento(idEvento)], evento.getVou(idEvento));
+    let res_evento = await Promise.all([evento.getevento(uid, idEvento), evento.getDatasEvento(idEvento), evento.getVou(202)]);
 
     //count vou
     console.log(res_evento[2]);
@@ -56,7 +56,7 @@ const getEvento = async (req, res) => {
       duracao: res_evento[0][0].duracao,
       classificacao_etaria: res_evento[0][0].classificacao_etaria,
       datas_evento: res_evento[1],
-      num_vou: res_evento[2] || 0,
+      num_vou: res_evento[2][0].vou || 0,
     };
 
     res.json(
