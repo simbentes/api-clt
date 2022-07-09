@@ -135,4 +135,74 @@ evento.getVou = (idEvento) => {
   });
 };
 
+evento.getVouGuardar = (uid, idEvento) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT ref_id_utilizadores FROM guardados_vou WHERE ref_id_utilizadores = ? AND ref_id_eventos = ?`,
+      [uid, idEvento],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
+evento.setVou = (uid, idEvento, action) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `INSERT INTO guardados_vou (vou,ref_id_utilizadores,ref_id_eventos,timestamp_vou) VALUES (?,?,?,CURRENT_TIMESTAMP)`,
+      [action, uid, idEvento],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
+evento.setGuardar = (uid, idEvento, action) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `INSERT INTO guardados_vou (guardados,ref_id_utilizadores,ref_id_eventos,timestamp_guardados) VALUES (?,?,?,CURRENT_TIMESTAMP)`,
+      [action, uid, idEvento],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
+evento.updateVou = (uid, idEvento, action) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE guardados_vou SET vou = ?,timestamp_vou = CURRENT_TIMESTAMP WHERE ref_id_utilizadores = ? AND ref_id_eventos = ?`,
+      [action, uid, idEvento],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
+evento.updateGuardar = (uid, idEvento, action) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE guardados_vou SET guardados = ?,timestamp_guardados = CURRENT_TIMESTAMP WHERE ref_id_utilizadores = ? AND ref_id_eventos = ?`,
+      [action, uid, idEvento],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 module.exports = evento;

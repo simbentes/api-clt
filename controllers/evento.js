@@ -130,11 +130,52 @@ const getPub = async (req, res) => {
   }
 };
 
+const action = async (req, res) => {
+  const { uid } = req;
+  const { idEvento } = req.params;
+  let { vou, guardar } = req.query;
+  try {
+    const isSetVouGuardar = await evento.getVouGuardar(uid, idEvento);
+
+    //update
+    if (isSetVouGuardar.length > 0) {
+      if (vou) {
+        vou = parseInt(vou);
+        if (vou === 0 || vou === 1) await evento.updateVou(uid, idEvento, vou);
+      }
+
+      if (guardar) {
+        guardar = parseInt(guardar);
+
+        if (guardar === 0 || guardar === 1) await evento.updateGuardar(uid, idEvento, guardar);
+      }
+      //insert
+    } else {
+      if (vou) {
+        vou = parseInt(vou);
+        if (vou === 0 || vou === 1) await evento.setVou(uid, idEvento, vou);
+      }
+
+      if (guardar) {
+        guardar = parseInt(guardar);
+
+        if (guardar === 0 || guardar === 1) await evento.setGuardar(uid, idEvento, guardar);
+      }
+    }
+
+    res.json(success());
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const EventoController = {
   getAll,
   getEvento,
   getSaved,
   getPub,
+  action,
 };
 
 module.exports = EventoController;
