@@ -3,11 +3,11 @@ const { NotFoundError } = require("../utils/errors");
 const { evento, pub } = require("../database");
 
 const getAll = async (req, res) => {
-  let { idtipo = 1 } = req.params;
-  idtipo = parseInt(idtipo);
+  let { tipo } = req.query;
+  tipo = parseInt(tipo);
 
   try {
-    let res_evento = await evento.getByType(idtipo);
+    let res_evento = await evento.getByType(tipo);
     res.json(success(res_evento));
   } catch (err) {
     console.log(err);
