@@ -20,12 +20,7 @@ const getSaved = async (req, res) => {
 
   try {
     let res_evento = await evento.getSaved(uid);
-    res.json(
-      success(res_evento, {
-        limit,
-        currentPage: page,
-      })
-    );
+    res.json(success(res_evento));
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
