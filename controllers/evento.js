@@ -4,14 +4,24 @@ const { evento, pub } = require("../database");
 
 const getAll = async (req, res) => {
   let { tipo } = req.query;
-  tipo = parseInt(tipo);
 
-  try {
-    let res_evento = await evento.getByType(tipo);
-    res.json(success(res_evento));
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
+  if (!tipo) {
+    try {
+      let res_evento = await evento.getAll();
+      res.json(success(res_evento));
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  } else {
+    tipo = parseInt(tipo);
+    try {
+      let res_evento = await evento.getByType(tipo);
+      res.json(success(res_evento));
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
   }
 };
 
