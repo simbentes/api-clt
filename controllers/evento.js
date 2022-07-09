@@ -44,6 +44,22 @@ const getEvento = async (req, res) => {
 
     let obj_evento = {
       ...res_evento[0][0],
+      nome: res_evento[0][0].nome,
+      link_reserva: res_evento[0][0].link_reserva,
+      link_bilheteira: res_evento[0][0].link_bilheteira,
+      img: res_evento[0][0].img,
+      descricao_curta: res_evento[0][0].descricao_curta,
+      descricao: res_evento[0][0].descricao,
+      ficha_tecnica: res_evento[0][0].ficha_tecnica,
+      lotacao: res_evento[0][0].lotacao,
+      ref_id_tipo_preco: res_evento[0][0].ref_id_tipo_preco,
+      preco_desconto: res_evento[0][0].preco_desconto,
+      preco_normal: res_evento.preco_normal,
+      id_artistas: res_evento[0][0].id_artistas,
+      guardado: res_evento[0][0].guardado ? true : false,
+      vou: res_evento[0][0].guardado ? true : false,
+      duracao: res_evento[0][0].duracao,
+      classificacao_etaria: res_evento[0][0].classificacao_etaria,
       datas_evento: res_evento[1],
       num_vou: res_evento[2] || 0,
     };

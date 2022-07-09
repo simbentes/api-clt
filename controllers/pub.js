@@ -104,10 +104,10 @@ const like = async (req, res) => {
 };
 
 const send = async (req, res) => {
-  const img_info = req.file;
+  const { filename } = req.file;
 
   try {
-    res.json(success({ img: "enviada.", img_info, texto: req.body.txt, evento: req.body.refEvent }));
+    res.json(success({ img: "enviada.", filename, texto: req.body.txt, evento: req.body.refEvent }));
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
