@@ -104,10 +104,16 @@ const like = async (req, res) => {
 };
 
 const send = async (req, res) => {
+  const { uid } = req;
   const { filename } = req.file;
+  const { txt, refEvent } = req.body;
+
+  const resp = await pub.send(txt, filename, uid);
+
+  await pub.assocEvent(refEvent, resp.insertId);
 
   try {
-    res.json(success({ img: "enviada.", filename, texto: req.body.txt, evento: req.body.refEvent }));
+    res.json(success());
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

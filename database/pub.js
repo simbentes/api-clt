@@ -105,4 +105,24 @@ pub.dont_like = (uid, idPub) => {
   });
 };
 
+pub.send = (txt, filename, uid) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`INSERT INTO publicacoes ( texto, foto, ref_id_utilizadores) VALUES (?,?,?);`, [txt, filename, uid], (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
+pub.assocEvent = (evento, pub) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`INSERT INTO pub_associadas_eventos (ref_id_eventos, ref_id_publicacoes) VALUES (?,?);`, [evento, pub], (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
 module.exports = pub;
