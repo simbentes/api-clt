@@ -42,10 +42,10 @@ const getEvento = async (req, res) => {
   const { idEvento } = req.params;
 
   try {
-    let res_evento = await Promise.all([evento.getevento(uid, idEvento), evento.getDatasEvento(idEvento), evento.getVou(202)]);
+    let res_evento = await Promise.all([evento.getevento(uid, idEvento), evento.getDatasEvento(idEvento), evento.getVou(idEvento)]);
 
     //count vou
-    console.log(res_evento[2]);
+    console.log(res_evento[2][0]);
 
     let obj_evento = {
       nome: res_evento[0][0].nome,
