@@ -48,7 +48,6 @@ const getEvento = async (req, res) => {
     console.log(res_evento[2]);
 
     let obj_evento = {
-      ...res_evento[0][0],
       nome: res_evento[0][0].nome,
       link_reserva: res_evento[0][0].link_reserva,
       link_bilheteira: res_evento[0][0].link_bilheteira,
@@ -59,7 +58,7 @@ const getEvento = async (req, res) => {
       lotacao: res_evento[0][0].lotacao,
       ref_id_tipo_preco: res_evento[0][0].ref_id_tipo_preco,
       preco_desconto: res_evento[0][0].preco_desconto,
-      preco_normal: res_evento.preco_normal,
+      preco_normal: res_evento[0][0].preco_normal,
       id_artistas: res_evento[0][0].id_artistas,
       guardado: res_evento[0][0].guardado ? true : false,
       vou: res_evento[0][0].vou ? true : false,
