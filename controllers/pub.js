@@ -71,7 +71,7 @@ const getComments = async (req, res) => {
         user: {
           name: el.name,
           id: el.id_user,
-          img: el.foto_perfil,
+          img: el.img,
         },
         time: el.time,
         like: !el.like ? false : true,
@@ -138,11 +138,23 @@ const send = async (req, res) => {
   }
 };
 
+const eliminar = async (req, res) => {
+  const { uid } = req;
+
+  try {
+    res.json(success());
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const pubController = {
   getAll,
   getComments,
   like,
   send,
+  eliminar,
 };
 
 module.exports = pubController;

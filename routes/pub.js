@@ -21,4 +21,6 @@ router.get("/:idPub/like", authenticatedMiddleware, pubController.like);
 
 router.post("/", authenticatedMiddleware, upload.single("image"), pubController.send);
 
+router.delete("/:idPub", authenticatedMiddleware, pubController.eliminar);
+
 module.exports = router;

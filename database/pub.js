@@ -139,4 +139,24 @@ pub.getNotiTokenByPubID = (pub) => {
   });
 };
 
+pub.eliminarGostosComentarios = (pub) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM gostos_comentarios WHERE  (ref_id_publicacoes = ?);`, pub, (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
+pub.eliminarGostos = (pub) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM gostos WHERE (ref_id_publicacoes = ?);`, pub, (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
 module.exports = pub;
