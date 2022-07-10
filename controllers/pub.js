@@ -121,6 +121,7 @@ const send = async (req, res) => {
   const { txt, refEvent } = req.body;
 
   if (!filename) filename = null;
+
   console.log(filename);
 
   const resp = await pub.send(txt, filename, uid);
