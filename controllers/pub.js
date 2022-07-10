@@ -140,6 +140,32 @@ const send = async (req, res) => {
 
 const eliminar = async (req, res) => {
   const { uid } = req;
+  const { idPub } = req.params;
+  try {
+    await pub.eliminarGostosComentarios(idPub);
+  } catch (error) {
+    console.log(error, "erro1");
+  }
+  try {
+    await pub.eliminarComentarios(idPub);
+  } catch (error) {
+    console.log(error, "erro2");
+  }
+  try {
+    await pub.eliminarGostos(idPub);
+  } catch (error) {
+    console.log(error, "erro3");
+  }
+  try {
+    await pub.eliminarEventosPub(idPub);
+  } catch (error) {
+    console.log(error, "erro4");
+  }
+  try {
+    await pub.eliminarPub(idPub);
+  } catch (error) {
+    console.log(error, "erro5");
+  }
 
   try {
     res.json(success());

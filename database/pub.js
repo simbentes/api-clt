@@ -141,7 +141,21 @@ pub.getNotiTokenByPubID = (pub) => {
 
 pub.eliminarGostosComentarios = (pub) => {
   return new Promise((resolve, reject) => {
-    pool.query(`DELETE FROM gostos_comentarios WHERE  (ref_id_publicacoes = ?);`, pub, (err, rows) => {
+    pool.query(
+      `DELETE FROM gostos_comentarios WHERE ref_id_comentarios IN (SELECT id_comentarios FROM comentarios WHERE ref_id_publicacoes = ?)`,
+      pub,
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
+pub.eliminarComentarios = (pub) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM comentarios WHERE ref_id_publicacoes = ?`, pub, (err, rows) => {
       if (err) return reject(err);
 
       return resolve(rows);
@@ -151,7 +165,27 @@ pub.eliminarGostosComentarios = (pub) => {
 
 pub.eliminarGostos = (pub) => {
   return new Promise((resolve, reject) => {
-    pool.query(`DELETE FROM gostos WHERE (ref_id_publicacoes = ?);`, pub, (err, rows) => {
+    pool.query(`DELETE FROM gostos WHERE ref_id_publicacoes = ?;`, pub, (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
+pub.eliminarEventosPub = (pub) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM pub_associadas_eventos WHERE ref_id_publicacoes = ?;`, pub, (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
+pub.eliminarPub = (pub) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM publicacoes WHERE id_publicacoes = ?;`, pub, (err, rows) => {
       if (err) return reject(err);
 
       return resolve(rows);
