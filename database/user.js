@@ -18,7 +18,7 @@ user.register = (nome, apelido, email, password) => {
 user.findByEmail = (email) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "SELECT utilizadores.id_utilizadores AS uid, utilizadores.password FROM `utilizadores` WHERE email = ?",
+      "SELECT utilizadores.id_utilizadores AS uid, utilizadores.password, utilizadores.nome, utilizadores.foto_perfil AS avatar FROM `utilizadores` WHERE email = ?",
       [email],
       (err, rows) => {
         if (err) return reject(err);

@@ -83,9 +83,12 @@ async function login(req, res) {
       user.password = undefined;
 
       res.send(
-        success(user.uid, {
-          token,
-        })
+        success(
+          { uid: user.uid, avatar: user.avatar, firstName: user.nome },
+          {
+            token,
+          }
+        )
       );
     } else {
       throw UnauthorizedError("Invalid credentials");
