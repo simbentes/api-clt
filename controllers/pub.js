@@ -117,12 +117,16 @@ const like = async (req, res) => {
 
 const send = async (req, res) => {
   const { uid } = req;
-  let { filename } = req.file;
-  const { txt, refEvent } = req.body;
+  let filename = null;
+  let refEvent = null;
+  const { txt } = req.body;
 
-  if (!filename) filename = null;
-
-  console.log(filename);
+  try {
+    filename = req.file.filename;
+    refEvent = req.body.refEvent;
+  } catch (error) {
+    console.log(error);
+  }
 
   const resp = await pub.send(txt, filename, uid);
 
