@@ -117,9 +117,10 @@ const like = async (req, res) => {
 
 const send = async (req, res) => {
   const { uid } = req;
-  const { filename } = req.file;
+  let { filename } = req.file;
   const { txt, refEvent } = req.body;
 
+  if (!filename) filename = null;
   console.log(filename);
 
   const resp = await pub.send(txt, filename, uid);
