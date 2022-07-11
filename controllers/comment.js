@@ -36,9 +36,25 @@ const like = async (req, res) => {
   }
 };
 
+const eliminar = async (req, res) => {
+  const { uid } = req;
+  const { idComment } = req.params;
+
+  try {
+    await comment.eliminarGostos(idComment);
+    await comment.eliminar(idComment);
+
+    res.json(success());
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 const commentController = {
   like,
   send,
+  eliminar,
 };
 
 module.exports = commentController;

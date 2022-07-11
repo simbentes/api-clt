@@ -144,27 +144,27 @@ const eliminar = async (req, res) => {
   try {
     await pub.eliminarGostosComentarios(idPub);
   } catch (error) {
-    console.log(error, "erro1");
+    console.log(error);
   }
   try {
     await pub.eliminarComentarios(idPub);
   } catch (error) {
-    console.log(error, "erro2");
+    console.log(error);
   }
   try {
     await pub.eliminarGostos(idPub);
   } catch (error) {
-    console.log(error, "erro3");
+    console.log(error);
   }
   try {
     await pub.eliminarEventosPub(idPub);
   } catch (error) {
-    console.log(error, "erro4");
+    console.log(error);
   }
   try {
     await pub.eliminarPub(idPub);
   } catch (error) {
-    console.log(error, "erro5");
+    console.log(error);
   }
 
   try {

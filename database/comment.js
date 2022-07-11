@@ -39,4 +39,24 @@ comment.dont_like = (uid, idComment) => {
   });
 };
 
+comment.eliminarGostos = (comment) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM gostos_comentarios WHERE ref_id_comentarios = ?`, comment, (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
+comment.eliminar = (comment) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM comentarios WHERE id_comentarios = ?`, comment, (err, rows) => {
+      if (err) return reject(err);
+
+      return resolve(rows);
+    });
+  });
+};
+
 module.exports = comment;
