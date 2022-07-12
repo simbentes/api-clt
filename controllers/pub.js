@@ -138,24 +138,24 @@ const send = async (req, res) => {
         overwrite: true,
       };
 
-      try {
-        // Upload the image
-        const result = await cloudinary.uploader.upload(imagePath, options);
-        console.log(result, "resultado");
-        filename = result.public_id;
-      } catch (error) {
-        console.error(error, "erro");
-      }
+      // Upload the image
+      const result = await cloudinary.uploader.upload(imagePath, options);
+      console.log(result, "resultado");
+      return result.public_id;
+
+      console.log(filename, filename);
     };
-    console.log(req.file);
-    uploadImage(req.file.path);
+
+    const fileName = await uploadImage(req.file.path);
+    const resp = await pub.send(txt, fileName, uid);
+
+    if (refEvent) await pub.assocEvent(refEvent, resp.insertId);
   } catch (error) {
     console.log(error);
+    const resp = await pub.send(txt, filename, uid);
+
+    if (refEvent) await pub.assocEvent(refEvent, resp.insertId);
   }
-
-  const resp = await pub.send(txt, filename, uid);
-
-  if (refEvent) await pub.assocEvent(refEvent, resp.insertId);
 
   try {
     res.json(success());
