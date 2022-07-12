@@ -57,6 +57,20 @@ user.update = (firstName, lastName, img, bio, instagram, whatsapp, uid) => {
   });
 };
 
+user.updateNoFile = (firstName, lastName, bio, instagram, whatsapp, uid) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE utilizadores SET nome=?, apelido=?, biografia=?, instagram=?, whatsapp=? WHERE id_utilizadores = ?`,
+      [firstName, lastName, img, instagram, whatsapp, uid],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 user.getPub = (uid, lastId, limit) => {
   return new Promise((resolve, reject) => {
     pool.query(
