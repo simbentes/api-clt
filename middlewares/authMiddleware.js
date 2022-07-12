@@ -11,7 +11,7 @@ module.exports = async function authMiddleware(req, res, next) {
 
   if (token) {
     try {
-      await jwt.verify(token, process.env.TOKEN_SECRET);
+      await jwt.verify(token, `${process.env.TOKEN_SECRET}`);
     } catch (e) {
       throw UnauthorizedError();
     }
