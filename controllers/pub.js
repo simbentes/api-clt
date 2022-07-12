@@ -2,6 +2,7 @@ const { success } = require("../utils/apiResponse");
 const { NotFoundError } = require("../utils/errors");
 const { pub, evento } = require("../database");
 const axios = require("axios").default;
+const cloudinary = require("cloudinary").v2;
 
 const getAll = async (req, res) => {
   const { uid } = req;
@@ -118,10 +119,36 @@ const like = async (req, res) => {
 const send = async (req, res) => {
   const { uid } = req;
   let filename = null;
-  const { txt, refEvent } = req.body;
+  const { txt, refEvent, image } = req.body;
 
   try {
-    filename = req.file.filename;
+    cloudinary.config({
+      cloud_name: "dtdhjlagx",
+      api_key: "381445164451221",
+      api_secret: "fUMzRfxXAiiyRBj5QhYzHdjorTQ",
+      secure: true,
+    });
+
+    const uploadImage = async (imagePath) => {
+      // Use the uploaded file's name as the asset's public ID and
+      // allow overwriting the asset with new versions
+      const options = {
+        use_filename: true,
+        unique_filename: true,
+        overwrite: true,
+      };
+
+      try {
+        // Upload the image
+        const result = await cloudinary.uploader.upload(imagePath, options);
+        console.log(result, "resultado");
+        filename = result.public_id;
+      } catch (error) {
+        console.error(error, "erro");
+      }
+    };
+    console.log(req.file);
+    uploadImage(req.file.path);
   } catch (error) {
     console.log(error);
   }
