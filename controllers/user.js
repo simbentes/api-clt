@@ -50,18 +50,36 @@ async function update(req, res) {
   const { firstName, lastName, bio, instagram, whatsapp } = req.body;
 
   try {
-    filename = req.file.filename;
+    cloudinary.config({
+      cloud_name: "dtdhjlagx",
+      api_key: "381445164451221",
+      api_secret: "fUMzRfxXAiiyRBj5QhYzHdjorTQ",
+      secure: true,
+    });
+
+    const uploadImage = async (imagePath) => {
+      // Use the uploaded file's name as the asset's public ID and
+      // allow overwriting the asset with new versions
+      const options = {
+        use_filename: true,
+        unique_filename: true,
+        overwrite: true,
+      };
+
+      // Upload the image
+      const result = await cloudinary.uploader.upload(imagePath, options);
+      console.log(result, "resultado");
+      return result.public_id;
+    };
+
+    const fileName = await uploadImage(req.file.path);
+    await user.update(firstName, lastName, fileName, bio, instagram, whatsapp, uid);
   } catch (error) {
     console.log(error);
+    await user.updateNoFile(firstName, lastName, bio, instagram, whatsapp, uid);
   }
 
   try {
-    if (filename) {
-      await user.update(firstName, lastName, filename, bio, instagram, whatsapp, uid);
-    } else {
-      await user.updateNoFile(firstName, lastName, bio, instagram, whatsapp, uid);
-    }
-
     res.json(success({ firstName, filename }));
   } catch (err) {
     console.log(err);
