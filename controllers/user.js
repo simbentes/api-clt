@@ -62,7 +62,7 @@ async function update(req, res) {
       await user.updateNoFile(firstName, lastName, bio, instagram, whatsapp, uid);
     }
 
-    res.json(success());
+    res.json(success({ firstName, filename }));
   } catch (err) {
     console.log(err);
     throw new ConflictError("Error.");
