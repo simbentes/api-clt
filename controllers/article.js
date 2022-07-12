@@ -46,7 +46,7 @@ const getAll = async (req, res) => {
       limit = 3;
     }
 
-    let resp_pub = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId)]);
+    let resp_pub = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId), evento.selectEventos()]);
 
     let resp_pub_valid = resp_pub[0].map((el) => {
       let evento = resp_pub[1].find((element) => {
@@ -54,10 +54,19 @@ const getAll = async (req, res) => {
       });
 
       if (evento) {
-        evento = {
-          id: evento.id_eventos,
-          title: evento.nome,
-        };
+        if (resp_pub[2].some((e) => e.id_eventos == evento.id_eventos)) {
+          evento = {
+            id: evento.id_eventos,
+            title: evento.nome,
+            type: "event",
+          };
+        } else {
+          evento = {
+            id: evento.id_eventos,
+            title: evento.nome,
+            type: "memory",
+          };
+        }
       }
 
       return {

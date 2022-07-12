@@ -205,4 +205,17 @@ evento.updateGuardar = (uid, idEvento, action) => {
   });
 };
 
+evento.selectEventos = () => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT eventos.id_eventos FROM eventos INNER JOIN data_eventos ON data_eventos.ref_id_eventos = eventos.id_eventos INNER JOIN tipo_eventos ON tipo_eventos.id_tipo_eventos = eventos.ref_id_tipo_eventos WHERE (data_eventos.data) IN (SELECT MIN(data_eventos.data) FROM data_eventos WHERE data_eventos.data > NOW() GROUP BY data_eventos.ref_id_eventos);`,
+      (err, rows) => {
+        if (err) return reject(err);
+
+        return resolve(rows);
+      }
+    );
+  });
+};
+
 module.exports = evento;
