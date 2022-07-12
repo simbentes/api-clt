@@ -1,4 +1,4 @@
-const { success } = require("../utils/apiResponse");
+const { success, error } = require("../utils/apiResponse");
 const { NotFoundError } = require("../utils/errors");
 const { article, pub, evento, memoria } = require("../database");
 
@@ -105,15 +105,21 @@ const getAll = async (req, res) => {
       res_article = [...resp_pub_valid, resp_evento_valid || resp_memoria_valid];
     }
 
+    let lastIdSend = resp_pub_valid[resp_pub_valid.length - 1] && resp_pub_valid[resp_pub_valid.length - 1].id;
+
+    if (!lastIdSend) {
+      lastIdSend = 0;
+    }
+
     res.json(
       success(res_article, {
         limit,
-        lastId: resp_pub_valid[resp_pub_valid.length - 1] && resp_pub_valid[resp_pub_valid.length - 1].id,
+        lastId: lastIdSend,
       })
     );
   } catch (err) {
     console.log(err);
-    res.sendStatus(500);
+    res.json(error());
   }
 };
 
