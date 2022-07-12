@@ -61,7 +61,7 @@ user.updateNoFile = (firstName, lastName, bio, instagram, whatsapp, uid) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `UPDATE utilizadores SET nome=?, apelido=?, biografia=?, instagram=?, whatsapp=? WHERE id_utilizadores = ?`,
-      [firstName, lastName, img, instagram, whatsapp, uid],
+      [firstName, lastName, bio, instagram, whatsapp, uid],
       (err, rows) => {
         if (err) return reject(err);
 
