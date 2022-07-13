@@ -48,7 +48,13 @@ async function update(req, res) {
 
   let filename = null;
 
-  const { firstName, lastName, bio, instagram, whatsapp } = req.body;
+  let { firstName, lastName, bio, instagram, whatsapp } = req.body;
+
+  if (firstName == "" || firstName == "null") firstName == "User";
+  if (lastName == "" || firstName == "null") lastName == " ";
+  if (bio == "" || bio == "null") bio == null;
+  if (instagram == "" || instagram == "null") instagram == null;
+  if (whatsapp == "" || whatsapp == "null") whatsapp == null;
 
   try {
     cloudinary.config({
