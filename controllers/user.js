@@ -34,7 +34,7 @@ async function register(req, res) {
 
       const token = generateToken(uid);
 
-      res.json(success(user, { token }));
+      res.json(success({ uid: user_res.insertId, avatar: "default.webp", firstName: firstName }, { token }));
     } else {
       throw new ConflictError("User with that email already exists");
     }
