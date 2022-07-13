@@ -5,6 +5,7 @@ const { getPaginationProps } = require("../utils/pagination");
 const { user, pub } = require("../database");
 const db = require("../database");
 const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary").v2;
 
 async function get(req, res) {
   const { uid } = req;
@@ -73,6 +74,7 @@ async function update(req, res) {
     };
 
     const fileName = await uploadImage(req.file.path);
+    filename = fileName;
     await user.update(firstName, lastName, fileName, bio, instagram, whatsapp, uid);
   } catch (error) {
     console.log(error);
