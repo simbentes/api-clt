@@ -37,98 +37,102 @@ const getAll = async (req, res) => {
   lastId = parseInt(lastId);
   let limit = 0;
 
-  try {
-    let config = pubAleatoria();
+  if (lastId != 0) {
+    try {
+      let config = pubAleatoria();
 
-    if (config[0]) {
-      limit = 4;
-    } else {
-      limit = 3;
-    }
-
-    let resp_pub = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId), evento.selectEventos()]);
-
-    let resp_pub_valid = resp_pub[0].map((el) => {
-      let evento = resp_pub[1].find((element) => {
-        return element.id_pub === el.id_pub;
-      });
-
-      if (evento) {
-        if (resp_pub[2].some((e) => e.id_eventos == evento.id_eventos)) {
-          evento = {
-            id: evento.id_eventos,
-            title: evento.nome,
-            type: "event",
-          };
-        } else {
-          evento = {
-            id: evento.id_eventos,
-            title: evento.nome,
-            type: "memory",
-          };
-        }
+      if (config[0]) {
+        limit = 4;
+      } else {
+        limit = 3;
       }
 
-      return {
-        type: "pub",
-        id: el.id_pub,
-        title: el.title,
-        img: el.img,
-        user: {
-          name: el.name,
-          id: el.id_user,
-          img: el.foto_perfil,
-        },
-        time: el.time,
-        event: evento ? evento : null,
-        like: !el.like ? false : true,
-      };
-    });
+      let resp_pub = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId), evento.selectEventos()]);
 
-    let resp_evento_valid;
-    let resp_memoria_valid;
+      let resp_pub_valid = resp_pub[0].map((el) => {
+        let evento = resp_pub[1].find((element) => {
+          return element.id_pub === el.id_pub;
+        });
 
-    if (config[1]) {
-      const resp_evento = await evento.getRandom();
-      const { id } = resp_evento[0];
-      const resp_data_vou = await evento.getVou(id);
+        if (evento) {
+          if (resp_pub[2].some((e) => e.id_eventos == evento.id_eventos)) {
+            evento = {
+              id: evento.id_eventos,
+              title: evento.nome,
+              type: "event",
+            };
+          } else {
+            evento = {
+              id: evento.id_eventos,
+              title: evento.nome,
+              type: "memory",
+            };
+          }
+        }
 
-      resp_evento_valid = {
-        type: "event",
-        ...resp_evento["0"],
-        ...resp_data_vou["0"],
-      };
+        return {
+          type: "pub",
+          id: el.id_pub,
+          title: el.title,
+          img: el.img,
+          user: {
+            name: el.name,
+            id: el.id_user,
+            img: el.foto_perfil,
+          },
+          time: el.time,
+          event: evento ? evento : null,
+          like: !el.like ? false : true,
+        };
+      });
+
+      let resp_evento_valid;
+      let resp_memoria_valid;
+
+      if (config[1]) {
+        const resp_evento = await evento.getRandom();
+        const { id } = resp_evento[0];
+        const resp_data_vou = await evento.getVou(id);
+
+        resp_evento_valid = {
+          type: "event",
+          ...resp_evento["0"],
+          ...resp_data_vou["0"],
+        };
+      }
+
+      if (config[2]) {
+        const resp_memoria = await memoria.getRandom();
+        resp_memoria_valid = {
+          type: "memory",
+          ...resp_memoria["0"],
+        };
+        console.log(resp_memoria, "resp memoria");
+      }
+
+      let res_article = [...resp_pub_valid];
+      if (!config[0]) {
+        res_article = [...resp_pub_valid, resp_evento_valid || resp_memoria_valid];
+      }
+
+      let lastIdSend = resp_pub_valid[resp_pub_valid.length - 1] && resp_pub_valid[resp_pub_valid.length - 1].id;
+
+      if (!lastIdSend) {
+        lastIdSend = 0;
+      }
+
+      res.json(
+        success(res_article, {
+          limit,
+          lastId: lastIdSend,
+        })
+      );
+    } catch (err) {
+      console.log(err);
+      res.json(error());
     }
-
-    if (config[2]) {
-      const resp_memoria = await memoria.getRandom();
-      resp_memoria_valid = {
-        type: "memory",
-        ...resp_memoria["0"],
-      };
-      console.log(resp_memoria, "resp memoria");
-    }
-
-    let res_article = [...resp_pub_valid];
-    if (!config[0]) {
-      res_article = [...resp_pub_valid, resp_evento_valid || resp_memoria_valid];
-    }
-
-    let lastIdSend = resp_pub_valid[resp_pub_valid.length - 1] && resp_pub_valid[resp_pub_valid.length - 1].id;
-
-    if (!lastIdSend) {
-      lastIdSend = 0;
-    }
-
-    res.json(
-      success(res_article, {
-        limit,
-        lastId: lastIdSend,
-      })
-    );
-  } catch (err) {
-    console.log(err);
-    res.json(error());
+  } else {
+    res.json(success([]));
   }
 };
 
