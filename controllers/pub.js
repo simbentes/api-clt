@@ -98,9 +98,9 @@ const like = async (req, res) => {
 
       // if (notiToken.length > 0) {
       await axios.post("https://exp.host/--/api/v2/push/send", {
-        to: "ExponentPushToken[4cVCbWGXtZVEH1CphD9APA]",
-        title: `Agenda Cultural UA`,
-        body: `O user ${uid} deu like na tua publicação.`,
+        to: "ExponentPushToken[-p9uevEbBADVo2dNYrxlQr]",
+        title: "Modelo App Cultout",
+        body: "Vítor Silva comentou a tua publicação.",
       });
       // }
 
