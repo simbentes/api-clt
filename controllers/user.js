@@ -22,9 +22,9 @@ async function register(req, res) {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    const password_hash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10);
 
-    const user_res = await user.register(firstName, lastName, email, password_hash);
+    const user_res = await user.register(firstName, lastName, email, passwordHash);
 
     console.log('1111::::::', user_res);
     console.log('2222::::::', user_res.status);
@@ -57,13 +57,13 @@ async function update(req, res) {
 
   let filename = null;
 
-  let { firstName, lastName, bio, instagram, whatsapp } = req.body;
+  const { firstName, lastName, bio, instagram, whatsapp } = req.body;
 
-  if (firstName == '' || firstName == 'null') firstName == 'User';
-  if (lastName == '' || firstName == 'null') lastName == ' ';
-  if (bio == '' || bio == 'null') bio == null;
-  if (instagram == '' || instagram == 'null') instagram == null;
-  if (whatsapp == '' || whatsapp == 'null') whatsapp == null;
+  if (firstName === '' || firstName === 'null') firstName === 'User';
+  if (lastName === '' || firstName === 'null') lastName === ' ';
+  if (bio === '' || bio === 'null') bio === null;
+  if (instagram === '' || instagram === 'null') instagram === null;
+  if (whatsapp === '' || whatsapp === 'null') whatsapp === null;
 
   try {
     cloudinary.config({
@@ -117,7 +117,7 @@ async function login(req, res) {
   if (users.length !== 0) {
     const [user] = users;
 
-    //verificar se a password é igual
+    // verificar se a password é igual
     const match = await bcrypt.compare(password, user.password);
 
     console.log(match);
@@ -205,21 +205,19 @@ async function follow(req, res) {
 
 const getPub = async (req, res) => {
   const { uid } = req;
-  const { idUser } = req.params;
   let { lastId = 9999999999, limit = 3 } = req.query;
   lastId = parseInt(lastId);
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([
+    const resp = await Promise.all([
       user.getPub(uid, lastId, limit),
       pub.getEvent_user(uid, lastId, limit),
     ]);
 
     console.log(resp[0], 'INFO PUB');
-    console.log(resp[1]), 'INFO PUB EVENTO ASSOCIADO';
 
-    let resp_pub = resp[0].map((el) => {
+    const resp_pub = resp[0].map((el) => {
       let evento = resp[1].find((element) => {
         console.log(element.id_pub, ':::///:::///::', el.id_pub);
         return element.id_pub === el.id_pub;

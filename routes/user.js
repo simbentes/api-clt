@@ -1,14 +1,22 @@
 const express = require('express');
 const { body } = require('express-validator');
-const { userController } = require('../controllers');
-const { validationMiddleware } = require('../middlewares/validationMiddleware');
-const authenticatedMiddleware = require('../middlewares/authenticatedMiddleware');
 const multer = require('multer');
 const crypto = require('crypto');
 
+const { userController } = require('../controllers');
+
+const { validationMiddleware } = require('../middlewares/validationMiddleware');
+const authenticatedMiddleware = require('../middlewares/authenticatedMiddleware');
+
 const router = express.Router();
 
-var storage = multer.diskStorage({
+const arr = [1, 2, 3, 4];
+
+arr.map((x) => {
+  return x + 1;
+});
+
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './img');
   },
@@ -49,7 +57,7 @@ router
   .get(authenticatedMiddleware, userController.get)
   .put(authenticatedMiddleware, upload.single('image'), userController.update);
 
-//router.get("/:id", userController.getById);
+// router.get("/:id", userController.getById);
 
 router.get('/pub', authenticatedMiddleware, userController.getPub);
 
