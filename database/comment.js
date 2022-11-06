@@ -1,4 +1,4 @@
-const pool = require("../database/connection");
+const pool = require('../database/connection');
 let comment = {};
 
 comment.send = (uid, idPub, txt) => {
@@ -10,18 +10,22 @@ comment.send = (uid, idPub, txt) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
 
 comment.like = (uid, idComment) => {
   return new Promise((resolve, reject) => {
-    pool.query(`INSERT INTO gostos_comentarios (ref_id_utilizadores, ref_id_comentarios) VALUES (?, ?)`, [uid, idComment], (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `INSERT INTO gostos_comentarios (ref_id_utilizadores, ref_id_comentarios) VALUES (?, ?)`,
+      [uid, idComment],
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 
@@ -34,18 +38,22 @@ comment.dont_like = (uid, idComment) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
 
 comment.eliminarGostos = (comment) => {
   return new Promise((resolve, reject) => {
-    pool.query(`DELETE FROM gostos_comentarios WHERE ref_id_comentarios = ?`, comment, (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `DELETE FROM gostos_comentarios WHERE ref_id_comentarios = ?`,
+      comment,
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 

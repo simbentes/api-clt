@@ -1,6 +1,6 @@
-const { success } = require("../utils/apiResponse");
-const { NotFoundError } = require("../utils/errors");
-const { memoria, evento } = require("../database");
+const { success } = require('../utils/apiResponse');
+const { NotFoundError } = require('../utils/errors');
+const { memoria, evento } = require('../database');
 
 const getAll = async (req, res) => {
   let { page = 0, limit = 4 } = req.query;
@@ -17,7 +17,7 @@ const getAll = async (req, res) => {
       success(res_memoria, {
         limit,
         currentPage: page,
-      })
+      }),
     );
   } catch (err) {
     console.log(err);
@@ -40,7 +40,7 @@ const getMemoria = async (req, res) => {
       success(res_memoria, {
         limit: 1,
         currentPage: 0,
-      })
+      }),
     );
   } catch (err) {
     console.log(err);

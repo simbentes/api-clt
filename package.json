@@ -9,7 +9,8 @@
     "serve": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write 'routes/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "pre:commit": "npm run format"
+    "pre:commit": "npm run format",
+    "prettify": "prettier --write"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +28,8 @@
     "nodemon": "^2.0.16"
   },
   "devDependencies": {
+    "eslint": "^8.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "pre-commit": "^1.2.2",
     "prettier": "^2.7.1"
   }

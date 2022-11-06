@@ -1,4 +1,4 @@
-const pool = require("./connection");
+const pool = require('./connection');
 let user = {};
 
 user.register = (nome, apelido, email, password) => {
@@ -10,7 +10,7 @@ user.register = (nome, apelido, email, password) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -18,13 +18,13 @@ user.register = (nome, apelido, email, password) => {
 user.findByEmail = (email) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "SELECT utilizadores.id_utilizadores AS uid, utilizadores.password, utilizadores.nome, utilizadores.foto_perfil AS avatar FROM `utilizadores` WHERE email = ?",
+      'SELECT utilizadores.id_utilizadores AS uid, utilizadores.password, utilizadores.nome, utilizadores.foto_perfil AS avatar FROM `utilizadores` WHERE email = ?',
       [email],
       (err, rows) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -32,13 +32,13 @@ user.findByEmail = (email) => {
 user.getById = (uid) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "SELECT id_utilizadores AS uid, nome AS firstName, apelido AS lastName, foto_perfil AS img, biografia AS bio, email, instagram, whatsapp FROM utilizadores WHERE id_utilizadores = ?",
+      'SELECT id_utilizadores AS uid, nome AS firstName, apelido AS lastName, foto_perfil AS img, biografia AS bio, email, instagram, whatsapp FROM utilizadores WHERE id_utilizadores = ?',
       uid,
       (err, rows) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -52,7 +52,7 @@ user.update = (firstName, lastName, img, bio, instagram, whatsapp, uid) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -66,7 +66,7 @@ user.updateNoFile = (firstName, lastName, bio, instagram, whatsapp, uid) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -80,7 +80,7 @@ user.getPub = (uid, lastId, limit) => {
         if (err) return reject(err);
         console.log(rows);
         return resolve(rows);
-      }
+      },
     );
   });
 };

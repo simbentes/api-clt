@@ -1,13 +1,14 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const { UnauthorizedError } = require("../utils/errors");
+const { UnauthorizedError } = require('../utils/errors');
 
 module.exports = async function authMiddleware(req, res, next) {
   const { authorization } = req.headers;
   if (req.uid) next();
 
   // retirar o token do header do request
-  const token = authorization && authorization.split(" ")[0] === "Bearer" && authorization.split(" ")[1];
+  const token =
+    authorization && authorization.split(' ')[0] === 'Bearer' && authorization.split(' ')[1];
 
   if (token) {
     try {

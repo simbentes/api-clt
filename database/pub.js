@@ -1,4 +1,4 @@
-const pool = require("../database/connection");
+const pool = require('../database/connection');
 let pub = {};
 
 pub.getAll = (uid, lastId, limit) => {
@@ -10,7 +10,7 @@ pub.getAll = (uid, lastId, limit) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -24,7 +24,7 @@ pub.getEvent = (lastId) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -38,7 +38,7 @@ pub.getEvent_profile = (lastId) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -52,7 +52,7 @@ pub.getEvent_event = (idEvento, lastId, limit) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -66,7 +66,7 @@ pub.getEvent_user = (uid, lastId, limit) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -80,48 +80,64 @@ pub.getComments = (uid, idPub) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
 
 pub.like = (uid, idPub) => {
   return new Promise((resolve, reject) => {
-    pool.query(`INSERT INTO gostos (ref_id_utilizadores, ref_id_publicacoes) VALUES (?, ?)`, [uid, idPub], (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `INSERT INTO gostos (ref_id_utilizadores, ref_id_publicacoes) VALUES (?, ?)`,
+      [uid, idPub],
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 
 pub.dont_like = (uid, idPub) => {
   return new Promise((resolve, reject) => {
-    pool.query(`DELETE FROM gostos WHERE gostos.ref_id_utilizadores = ? AND gostos.ref_id_publicacoes = ?`, [uid, idPub], (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `DELETE FROM gostos WHERE gostos.ref_id_utilizadores = ? AND gostos.ref_id_publicacoes = ?`,
+      [uid, idPub],
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 
 pub.send = (txt, filename, uid) => {
   return new Promise((resolve, reject) => {
-    pool.query(`INSERT INTO publicacoes ( texto, foto, ref_id_utilizadores) VALUES (?,?,?);`, [txt, filename, uid], (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `INSERT INTO publicacoes ( texto, foto, ref_id_utilizadores) VALUES (?,?,?);`,
+      [txt, filename, uid],
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 
 pub.assocEvent = (evento, pub) => {
   return new Promise((resolve, reject) => {
-    pool.query(`INSERT INTO pub_associadas_eventos (ref_id_eventos, ref_id_publicacoes) VALUES (?,?);`, [evento, pub], (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `INSERT INTO pub_associadas_eventos (ref_id_eventos, ref_id_publicacoes) VALUES (?,?);`,
+      [evento, pub],
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 
@@ -134,7 +150,7 @@ pub.getNotiTokenByPubID = (pub) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -148,7 +164,7 @@ pub.eliminarGostosComentarios = (pub) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -175,11 +191,15 @@ pub.eliminarGostos = (pub) => {
 
 pub.eliminarEventosPub = (pub) => {
   return new Promise((resolve, reject) => {
-    pool.query(`DELETE FROM pub_associadas_eventos WHERE ref_id_publicacoes = ?;`, pub, (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `DELETE FROM pub_associadas_eventos WHERE ref_id_publicacoes = ?;`,
+      pub,
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 

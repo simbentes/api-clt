@@ -1,11 +1,11 @@
-const { success } = require("../utils/apiResponse");
-const { generateToken } = require("../utils/auth");
-const { ConflictError, NotFoundError, UnauthorizedError, BadRequest } = require("../utils/errors");
-const { getPaginationProps } = require("../utils/pagination");
-const { user, pub } = require("../database");
-const db = require("../database");
-const bcrypt = require("bcrypt");
-const cloudinary = require("cloudinary").v2;
+const { success } = require('../utils/apiResponse');
+const { generateToken } = require('../utils/auth');
+const { ConflictError, NotFoundError, UnauthorizedError, BadRequest } = require('../utils/errors');
+const { getPaginationProps } = require('../utils/pagination');
+const { user, pub } = require('../database');
+const db = require('../database');
+const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
 
 async function get(req, res) {
   const { uid } = req;
@@ -14,7 +14,7 @@ async function get(req, res) {
 
     res.json(success(...user_res));
   } catch (err) {
-    throw new NotFoundError("User not found");
+    throw new NotFoundError('User not found');
   }
 }
 
@@ -26,20 +26,29 @@ async function register(req, res) {
 
     const user_res = await user.register(firstName, lastName, email, password_hash);
 
-    console.log("1111::::::", user_res);
-    console.log("2222::::::", user_res.status);
+    console.log('1111::::::', user_res);
+    console.log('2222::::::', user_res.status);
 
     if (user_res.affectedRows === 1) {
       const { insertId: uid } = user_res;
 
       const token = generateToken(uid);
 
-      res.json(success({ uid: user_res.insertId, avatar: "default.webp", firstName: firstName }, { token }));
+      res.json(
+        success(
+          {
+            uid: user_res.insertId,
+            avatar: 'default.webp',
+            firstName: firstName,
+          },
+          { token },
+        ),
+      );
     } else {
-      throw new ConflictError("User with that email already exists");
+      throw new ConflictError('User with that email already exists');
     }
   } catch (err) {
-    throw new ConflictError("Duplicate information.");
+    throw new ConflictError('Duplicate information.');
   }
 }
 
@@ -50,17 +59,17 @@ async function update(req, res) {
 
   let { firstName, lastName, bio, instagram, whatsapp } = req.body;
 
-  if (firstName == "" || firstName == "null") firstName == "User";
-  if (lastName == "" || firstName == "null") lastName == " ";
-  if (bio == "" || bio == "null") bio == null;
-  if (instagram == "" || instagram == "null") instagram == null;
-  if (whatsapp == "" || whatsapp == "null") whatsapp == null;
+  if (firstName == '' || firstName == 'null') firstName == 'User';
+  if (lastName == '' || firstName == 'null') lastName == ' ';
+  if (bio == '' || bio == 'null') bio == null;
+  if (instagram == '' || instagram == 'null') instagram == null;
+  if (whatsapp == '' || whatsapp == 'null') whatsapp == null;
 
   try {
     cloudinary.config({
-      cloud_name: "dtdhjlagx",
-      api_key: "381445164451221",
-      api_secret: "fUMzRfxXAiiyRBj5QhYzHdjorTQ",
+      cloud_name: 'dtdhjlagx',
+      api_key: '381445164451221',
+      api_secret: 'fUMzRfxXAiiyRBj5QhYzHdjorTQ',
       secure: true,
     });
 
@@ -75,7 +84,7 @@ async function update(req, res) {
 
       // Upload the image
       const result = await cloudinary.uploader.upload(imagePath, options);
-      console.log(result, "resultado");
+      console.log(result, 'resultado');
       return result.public_id;
     };
 
@@ -88,10 +97,15 @@ async function update(req, res) {
   }
 
   try {
-    res.json(success({ firstName, filename }));
+    res.json(
+      success({
+        firstName,
+        filename,
+      }),
+    );
   } catch (err) {
     console.log(err);
-    throw new ConflictError("Error.");
+    throw new ConflictError('Error.');
   }
 }
 
@@ -115,20 +129,24 @@ async function login(req, res) {
 
       res.send(
         success(
-          { uid: user.uid, avatar: user.avatar, firstName: user.nome },
+          {
+            uid: user.uid,
+            avatar: user.avatar,
+            firstName: user.nome,
+          },
           {
             token,
-          }
-        )
+          },
+        ),
       );
     } else {
-      throw UnauthorizedError("Invalid credentials");
+      throw UnauthorizedError('Invalid credentials');
     }
 
     return;
   }
 
-  throw BadRequest("Invalid credentials");
+  throw BadRequest('Invalid credentials');
 }
 
 //
@@ -178,11 +196,11 @@ async function follow(req, res) {
   if (!isFollowinguser?.length) {
     const result = await user.addFollowee(id);
 
-    res.send(success(result, {}, "Success following"));
+    res.send(success(result, {}, 'Success following'));
     return;
   }
 
-  throw new ConflictError("Already following the user");
+  throw new ConflictError('Already following the user');
 }
 
 const getPub = async (req, res) => {
@@ -193,14 +211,17 @@ const getPub = async (req, res) => {
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([user.getPub(uid, lastId, limit), pub.getEvent_user(uid, lastId, limit)]);
+    let resp = await Promise.all([
+      user.getPub(uid, lastId, limit),
+      pub.getEvent_user(uid, lastId, limit),
+    ]);
 
-    console.log(resp[0], "INFO PUB");
-    console.log(resp[1]), "INFO PUB EVENTO ASSOCIADO";
+    console.log(resp[0], 'INFO PUB');
+    console.log(resp[1]), 'INFO PUB EVENTO ASSOCIADO';
 
     let resp_pub = resp[0].map((el) => {
       let evento = resp[1].find((element) => {
-        console.log(element.id_pub, ":::///:::///::", el.id_pub);
+        console.log(element.id_pub, ':::///:::///::', el.id_pub);
         return element.id_pub === el.id_pub;
       });
 
@@ -230,7 +251,7 @@ const getPub = async (req, res) => {
       success(resp_pub, {
         limit,
         lastId: resp_pub[resp_pub.length - 1] && resp_pub[resp_pub.length - 1].id,
-      })
+      }),
     );
   } catch (err) {
     console.log(err);

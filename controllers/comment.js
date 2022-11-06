@@ -1,6 +1,6 @@
-const { success } = require("../utils/apiResponse");
-const { NotFoundError } = require("../utils/errors");
-const { comment } = require("../database");
+const { success } = require('../utils/apiResponse');
+const { NotFoundError } = require('../utils/errors');
+const { comment } = require('../database');
 
 const send = async (req, res) => {
   const { uid } = req;

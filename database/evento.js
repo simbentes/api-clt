@@ -1,4 +1,4 @@
-const pool = require("../database/connection");
+const pool = require('../database/connection');
 let evento = {};
 
 evento.getAll = () => {
@@ -9,7 +9,7 @@ evento.getAll = () => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -23,7 +23,7 @@ evento.getByType = (id) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -37,7 +37,7 @@ evento.getSaved = (uid) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -51,7 +51,7 @@ evento.getevento = (uid, id_evento) => {
         if (err) return reject(err);
         console.log(rows);
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -65,7 +65,7 @@ evento.getDatasEvento = (id_evento) => {
         if (err) return reject(err);
         console.log(rows);
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -79,7 +79,7 @@ evento.getVou = (id_evento) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -93,7 +93,7 @@ evento.getPub = (uid, id_evento, lastId, limit) => {
         if (err) return reject(err);
         console.log(rows);
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -107,7 +107,7 @@ evento.getFotos = (id_evento) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -120,18 +120,22 @@ evento.getRandom = () => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
 
 evento.getVou = (idEvento) => {
   return new Promise((resolve, reject) => {
-    pool.query(`SELECT COUNT(vou) AS vou FROM guardados_vou WHERE vou = 1 AND guardados_vou.ref_id_eventos = ?`, idEvento, (err, rows) => {
-      if (err) return reject(err);
+    pool.query(
+      `SELECT COUNT(vou) AS vou FROM guardados_vou WHERE vou = 1 AND guardados_vou.ref_id_eventos = ?`,
+      idEvento,
+      (err, rows) => {
+        if (err) return reject(err);
 
-      return resolve(rows);
-    });
+        return resolve(rows);
+      },
+    );
   });
 };
 
@@ -144,7 +148,7 @@ evento.getVouGuardar = (uid, idEvento) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -158,7 +162,7 @@ evento.setVou = (uid, idEvento, action) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -172,7 +176,7 @@ evento.setGuardar = (uid, idEvento, action) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -186,7 +190,7 @@ evento.updateVou = (uid, idEvento, action) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -200,7 +204,7 @@ evento.updateGuardar = (uid, idEvento, action) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -213,7 +217,7 @@ evento.selectEventos = () => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };

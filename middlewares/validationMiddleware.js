@@ -1,6 +1,6 @@
-const { validationResult } = require("express-validator");
-const { error } = require("../utils/apiResponse");
-const { ValidationError } = require("../utils/errors");
+const { validationResult } = require('express-validator');
+const { error } = require('../utils/apiResponse');
+const { ValidationError } = require('../utils/errors');
 
 const validationMiddleware = (...checks) => [
   ...checks,

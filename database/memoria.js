@@ -1,4 +1,4 @@
-const pool = require("../database/connection");
+const pool = require('../database/connection');
 let memoria = {};
 
 memoria.getAll = (page, limit) => {
@@ -10,7 +10,7 @@ memoria.getAll = (page, limit) => {
         if (err) return reject(err);
 
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -24,7 +24,7 @@ memoria.getMemoria = (id_evento) => {
         if (err) return reject(err);
         console.log(rows);
         return resolve(rows);
-      }
+      },
     );
   });
 };
@@ -38,7 +38,7 @@ memoria.getRandom = (id_evento) => {
         if (err) return reject(err);
         console.log(rows);
         return resolve(rows);
-      }
+      },
     );
   });
 };

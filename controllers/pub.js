@@ -1,8 +1,8 @@
-const { success } = require("../utils/apiResponse");
-const { NotFoundError } = require("../utils/errors");
-const { pub, evento } = require("../database");
-const axios = require("axios").default;
-const cloudinary = require("cloudinary").v2;
+const { success } = require('../utils/apiResponse');
+const { NotFoundError } = require('../utils/errors');
+const { pub, evento } = require('../database');
+const axios = require('axios').default;
+const cloudinary = require('cloudinary').v2;
 
 const getAll = async (req, res) => {
   const { uid } = req;
@@ -48,7 +48,7 @@ const getAll = async (req, res) => {
       success(resp_pub, {
         limit,
         lastId: resp_pub[resp_pub.length - 1] && resp_pub[resp_pub.length - 1].id,
-      })
+      }),
     );
   } catch (err) {
     console.log(err);
@@ -97,10 +97,10 @@ const like = async (req, res) => {
       console.log(notiToken);
 
       // if (notiToken.length > 0) {
-      await axios.post("https://exp.host/--/api/v2/push/send", {
-        to: "ExponentPushToken[-p9uevEbBADVo2dNYrxlQr]",
-        title: "Modelo App Cultout",
-        body: "Vítor Silva comentou a tua publicação.",
+      await axios.post('https://exp.host/--/api/v2/push/send', {
+        to: 'ExponentPushToken[-p9uevEbBADVo2dNYrxlQr]',
+        title: 'Modelo App Cultout',
+        body: 'Vítor Silva comentou a tua publicação.',
       });
       // }
 
@@ -123,9 +123,9 @@ const send = async (req, res) => {
 
   try {
     cloudinary.config({
-      cloud_name: "dtdhjlagx",
-      api_key: "381445164451221",
-      api_secret: "fUMzRfxXAiiyRBj5QhYzHdjorTQ",
+      cloud_name: 'dtdhjlagx',
+      api_key: '381445164451221',
+      api_secret: 'fUMzRfxXAiiyRBj5QhYzHdjorTQ',
       secure: true,
     });
 
@@ -140,7 +140,7 @@ const send = async (req, res) => {
 
       // Upload the image
       const result = await cloudinary.uploader.upload(imagePath, options);
-      console.log(result, "resultado");
+      console.log(result, 'resultado');
       return result.public_id;
 
       console.log(filename, filename);

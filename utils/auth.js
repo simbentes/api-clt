@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 function generateToken(uid) {
   return jwt.sign(
@@ -9,7 +9,7 @@ function generateToken(uid) {
       // one day after
       exp: new Date().setDate(new Date().getDate() + 6),
     },
-    `${process.env.TOKEN_SECRET}`
+    `${process.env.TOKEN_SECRET}`,
   );
 }
 

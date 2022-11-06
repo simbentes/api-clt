@@ -1,6 +1,6 @@
-const { success, error } = require("../utils/apiResponse");
-const { NotFoundError } = require("../utils/errors");
-const { article, pub, evento, memoria } = require("../database");
+const { success, error } = require('../utils/apiResponse');
+const { NotFoundError } = require('../utils/errors');
+const { article, pub, evento, memoria } = require('../database');
 
 const pubAleatoria = () => {
   let arraypubs = [];
@@ -47,7 +47,11 @@ const getAll = async (req, res) => {
         limit = 3;
       }
 
-      let resp_pub = await Promise.all([pub.getAll(uid, lastId, limit), pub.getEvent(lastId), evento.selectEventos()]);
+      let resp_pub = await Promise.all([
+        pub.getAll(uid, lastId, limit),
+        pub.getEvent(lastId),
+        evento.selectEventos(),
+      ]);
 
       let resp_pub_valid = resp_pub[0].map((el) => {
         let evento = resp_pub[1].find((element) => {
@@ -59,19 +63,19 @@ const getAll = async (req, res) => {
             evento = {
               id: evento.id_eventos,
               title: evento.nome,
-              type: "event",
+              type: 'event',
             };
           } else {
             evento = {
               id: evento.id_eventos,
               title: evento.nome,
-              type: "memory",
+              type: 'memory',
             };
           }
         }
 
         return {
-          type: "pub",
+          type: 'pub',
           id: el.id_pub,
           title: el.title,
           img: el.img,
@@ -95,19 +99,19 @@ const getAll = async (req, res) => {
         const resp_data_vou = await evento.getVou(id);
 
         resp_evento_valid = {
-          type: "event",
-          ...resp_evento["0"],
-          ...resp_data_vou["0"],
+          type: 'event',
+          ...resp_evento['0'],
+          ...resp_data_vou['0'],
         };
       }
 
       if (config[2]) {
         const resp_memoria = await memoria.getRandom();
         resp_memoria_valid = {
-          type: "memory",
-          ...resp_memoria["0"],
+          type: 'memory',
+          ...resp_memoria['0'],
         };
-        console.log(resp_memoria, "resp memoria");
+        console.log(resp_memoria, 'resp memoria');
       }
 
       let res_article = [...resp_pub_valid];
@@ -115,7 +119,8 @@ const getAll = async (req, res) => {
         res_article = [...resp_pub_valid, resp_evento_valid || resp_memoria_valid];
       }
 
-      let lastIdSend = resp_pub_valid[resp_pub_valid.length - 1] && resp_pub_valid[resp_pub_valid.length - 1].id;
+      let lastIdSend =
+        resp_pub_valid[resp_pub_valid.length - 1] && resp_pub_valid[resp_pub_valid.length - 1].id;
 
       if (!lastIdSend) {
         lastIdSend = 0;
@@ -125,7 +130,7 @@ const getAll = async (req, res) => {
         success(res_article, {
           limit,
           lastId: lastIdSend,
-        })
+        }),
       );
     } catch (err) {
       console.log(err);

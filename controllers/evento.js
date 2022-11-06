@@ -1,6 +1,6 @@
-const { success } = require("../utils/apiResponse");
-const { NotFoundError } = require("../utils/errors");
-const { evento, pub } = require("../database");
+const { success } = require('../utils/apiResponse');
+const { NotFoundError } = require('../utils/errors');
+const { evento, pub } = require('../database');
 
 const getAll = async (req, res) => {
   let { tipo } = req.query;
@@ -42,7 +42,11 @@ const getEvento = async (req, res) => {
   const { idEvento } = req.params;
 
   try {
-    let res_evento = await Promise.all([evento.getevento(uid, idEvento), evento.getDatasEvento(idEvento), evento.getVou(idEvento)]);
+    let res_evento = await Promise.all([
+      evento.getevento(uid, idEvento),
+      evento.getDatasEvento(idEvento),
+      evento.getVou(idEvento),
+    ]);
 
     //count vou
     console.log(res_evento[2][0]);
@@ -72,7 +76,7 @@ const getEvento = async (req, res) => {
       success(obj_evento, {
         limit: 1,
         currentPage: 0,
-      })
+      }),
     );
   } catch (err) {
     console.log(err);
@@ -88,15 +92,18 @@ const getPub = async (req, res) => {
   limit = parseInt(limit);
 
   try {
-    let resp = await Promise.all([evento.getPub(uid, idEvento, lastId, limit), pub.getEvent_event(idEvento, lastId, limit)]);
+    let resp = await Promise.all([
+      evento.getPub(uid, idEvento, lastId, limit),
+      pub.getEvent_event(idEvento, lastId, limit),
+    ]);
 
     let resp_pub_event = resp[1];
 
-    console.log("JKANDSSJAJKNDKJADSKSDJNKNKJ::::::::::: ", resp_pub_event);
+    console.log('JKANDSSJAJKNDKJADSKSDJNKNKJ::::::::::: ', resp_pub_event);
 
     let resp_pub = resp[0].map((el) => {
       let evento = resp[1].find((element) => {
-        console.log(element.id_pub, ":::///:::///::", el.id_pub);
+        console.log(element.id_pub, ':::///:::///::', el.id_pub);
         return element.id_pub === el.id_pub;
       });
 
@@ -126,7 +133,7 @@ const getPub = async (req, res) => {
       success(resp_pub, {
         limit,
         lastId: resp_pub[resp_pub.length - 1] && resp_pub[resp_pub.length - 1].id,
-      })
+      }),
     );
   } catch (err) {
     console.log(err);
@@ -150,7 +157,7 @@ const action = async (req, res) => {
 
       if (guardar) {
         guardar = parseInt(guardar);
-        console.log(guardar, "GUARDAR");
+        console.log(guardar, 'GUARDAR');
         if (guardar === 0 || guardar === 1) await evento.updateGuardar(uid, idEvento, guardar);
       }
       //insert
@@ -163,7 +170,7 @@ const action = async (req, res) => {
       if (guardar) {
         guardar = parseInt(guardar);
 
-        console.log(guardar, "GUARDAR");
+        console.log(guardar, 'GUARDAR');
         if (guardar === 0 || guardar === 1) await evento.setGuardar(uid, idEvento, guardar);
       }
     }
