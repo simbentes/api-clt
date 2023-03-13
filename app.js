@@ -16,7 +16,7 @@ const authenticatedMiddleware = require('./middlewares/authenticatedMiddleware')
 const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
-app.use('.netlify/functions/img', express.static(__dirname + '/img'));
+app.use('.netlify/functions/api/img', express.static(__dirname + '/img'));
 app.use(
   express.urlencoded({
     extended: false,
@@ -25,13 +25,13 @@ app.use(
 
 app.use(authMiddleware);
 
-app.use('.netlify/functions/app/', indexRouter);
-app.use('.netlify/functions/app/memoria', memoriaRouter);
-app.use('.netlify/functions/app/article', articleRouter);
-app.use('.netlify/functions/app/user', userRouter);
-app.use('.netlify/functions/app/evento', eventoRouter);
-app.use('.netlify/functions/app/pub', pubRouter);
-app.use('.netlify/functions/app/comment', commentRouter);
+app.use('.netlify/functions/api/', indexRouter);
+app.use('.netlify/functions/api/memoria', memoriaRouter);
+app.use('.netlify/functions/api/article', articleRouter);
+app.use('.netlify/functions/api/user', userRouter);
+app.use('.netlify/functions/api/evento', eventoRouter);
+app.use('.netlify/functions/api/pub', pubRouter);
+app.use('.netlify/functions/api/comment', commentRouter);
 
 app.use((err, req, res, next) => {
   if (err && !res.headersSent) {
